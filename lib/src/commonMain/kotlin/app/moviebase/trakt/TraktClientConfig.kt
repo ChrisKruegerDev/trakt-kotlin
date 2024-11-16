@@ -6,7 +6,7 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.LoggingConfig
 
 @TraktDsl
 class TraktClientConfig {
@@ -23,13 +23,13 @@ class TraktClientConfig {
 
     internal var httpClientConfigBlock: (HttpClientConfig<*>.() -> Unit)? = null
     internal var httpClientBuilder: (() -> HttpClient)? = null
-    internal var httpClientLoggingBlock: (Logging.Config.() -> Unit)? = null
+    internal var httpClientLoggingBlock: (LoggingConfig.() -> Unit)? = null
 
     fun userAuthentication(block: TraktAuthCredentials.() -> Unit) {
         traktAuthCredentials = TraktAuthCredentials().apply(block)
     }
 
-    fun logging(block: Logging.Config.() -> Unit) {
+    fun logging(block: LoggingConfig.() -> Unit) {
         httpClientLoggingBlock = block
     }
 
