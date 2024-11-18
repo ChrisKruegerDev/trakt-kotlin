@@ -5,7 +5,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 sealed class TraktCheckin {
-
     @Serializable
     data class Active(
         @SerialName("watched_at") val watchedAt: LocalDateTime?,

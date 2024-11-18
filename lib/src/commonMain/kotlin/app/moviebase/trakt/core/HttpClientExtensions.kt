@@ -25,9 +25,12 @@ internal suspend inline fun <reified T> HttpClient.postByPaths(
 ): T = post(urlString = buildPaths(*paths), block = block).body()
 
 fun buildPaths(vararg paths: String): String = paths.joinToString(separator = "/")
+
 fun buildPaths(paths: Collection<String>): String = paths.joinToString(separator = "/")
 
 typealias RequestInterceptor = suspend (HttpRequestBuilder) -> Unit
 
-fun HttpClient.interceptRequest(phase: PipelinePhase = HttpRequestPipeline.Render, interceptor: RequestInterceptor) =
-    requestPipeline.intercept(phase) { interceptor(context) }
+fun HttpClient.interceptRequest(
+    phase: PipelinePhase = HttpRequestPipeline.Render,
+    interceptor: RequestInterceptor,
+) = requestPipeline.intercept(phase) { interceptor(context) }

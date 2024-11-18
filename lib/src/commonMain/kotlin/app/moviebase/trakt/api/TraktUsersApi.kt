@@ -23,24 +23,27 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.datetime.Instant
 
-class TraktUsersApi(private val client: HttpClient) {
-
+class TraktUsersApi(
+    private val client: HttpClient,
+) {
     suspend fun getSettings(): TraktUserSettings = client.getByPaths("users")
 
     suspend fun getProfile(
         userSlug: TraktUserSlug,
         extended: TraktExtended? = null,
-    ): TraktUser = client.getByPaths(*pathUsers(userSlug)) {
-        extended?.let { parameterExtended(it) }
-    }
+    ): TraktUser =
+        client.getByPaths(*pathUsers(userSlug)) {
+            extended?.let { parameterExtended(it) }
+        }
 
     suspend fun createList(
         userSlug: TraktUserSlug = TraktUserSlug.ME,
         list: TraktList,
-    ): TraktList = client.postByPaths(*pathUsers(userSlug, "lists")) {
-        contentType(ContentType.Application.Json)
-        setBody(list)
-    }
+    ): TraktList =
+        client.postByPaths(*pathUsers(userSlug, "lists")) {
+            contentType(ContentType.Application.Json)
+            setBody(list)
+        }
 
     suspend fun getLists(userSlug: TraktUserSlug = TraktUserSlug.ME): List<TraktList> = client.getByPaths(*pathUsers(userSlug, "lists"))
 
@@ -48,27 +51,30 @@ class TraktUsersApi(private val client: HttpClient) {
         userSlug: TraktUserSlug = TraktUserSlug.ME,
         listId: String,
         extended: TraktExtended? = null,
-    ): List<TraktUserListItem> = client.getByPaths(*pathLists(userSlug, listId)) {
-        extended?.let { parameterExtended(it) }
-    }
+    ): List<TraktUserListItem> =
+        client.getByPaths(*pathLists(userSlug, listId)) {
+            extended?.let { parameterExtended(it) }
+        }
 
     suspend fun addListItems(
         userSlug: TraktUserSlug = TraktUserSlug.ME,
         listId: String,
         items: TraktSyncItems,
-    ): TraktSyncResponse = client.postByPaths(*pathLists(userSlug, listId)) {
-        contentType(ContentType.Application.Json)
-        setBody(items)
-    }
+    ): TraktSyncResponse =
+        client.postByPaths(*pathLists(userSlug, listId)) {
+            contentType(ContentType.Application.Json)
+            setBody(items)
+        }
 
     suspend fun removeListItems(
         userSlug: TraktUserSlug = TraktUserSlug.ME,
         listId: String,
         items: TraktSyncItems,
-    ): TraktSyncResponse = client.postByPaths(*pathLists(userSlug, listId, "remove")) {
-        contentType(ContentType.Application.Json)
-        setBody(items)
-    }
+    ): TraktSyncResponse =
+        client.postByPaths(*pathLists(userSlug, listId, "remove")) {
+            contentType(ContentType.Application.Json)
+            setBody(items)
+        }
 
     /**
      * Example: users/id/history/type/item_id?start_at=2016-06-01T00%3A00%3A00.000Z&end_at=2016-07-01T23%3A59%3A59.000Z
@@ -82,18 +88,22 @@ class TraktUsersApi(private val client: HttpClient) {
         endAt: Instant? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktHistoryItem> = client.getByPaths(*pathHistory(userSlug, listType, itemId)) {
-        extended?.let { parameterExtended(extended) }
-        startAt?.let { parameterStartAt(it) }
-        endAt?.let { parameterEndAt(it) }
-        page?.let { parameterPage(it) }
-        limit?.let { parameterLimit(it) }
-    }
+    ): List<TraktHistoryItem> =
+        client.getByPaths(*pathHistory(userSlug, listType, itemId)) {
+            extended?.let { parameterExtended(extended) }
+            startAt?.let { parameterStartAt(it) }
+            endAt?.let { parameterEndAt(it) }
+            page?.let { parameterPage(it) }
+            limit?.let { parameterLimit(it) }
+        }
 
     /**
      * Path: users/userSlug
      */
-    private fun pathUsers(userSlug: TraktUserSlug, vararg paths: String) = arrayOf("users", userSlug.name, *paths)
+    private fun pathUsers(
+        userSlug: TraktUserSlug,
+        vararg paths: String,
+    ) = arrayOf("users", userSlug.name, *paths)
 
     /**
      * Path: /users/userSlug/history/type/item_id

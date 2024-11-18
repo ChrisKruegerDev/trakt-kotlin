@@ -29,7 +29,6 @@ data class TraktComment(
     @SerialName("episode") val episode: TraktEpisode? = null,
     @SerialName("season") val season: TraktSeason? = null,
 ) {
-
     val displayUserName get() = user?.name ?: user?.userName
     val imagePath get() = user?.imagePath
     val containsSpoiler get() = comment.contains("[spoiler]")

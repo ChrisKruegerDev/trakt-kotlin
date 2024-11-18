@@ -7,16 +7,18 @@ import app.moviebase.trakt.model.TraktEpisode
 import app.moviebase.trakt.model.TraktRating
 import io.ktor.client.HttpClient
 
-class TraktEpisodesApi(private val client: HttpClient) {
-
+class TraktEpisodesApi(
+    private val client: HttpClient,
+) {
     suspend fun getSummary(
         traktSlug: String,
         seasonNumber: Int,
         episodeNumber: Int,
         extended: TraktExtended = TraktExtended.FULL,
-    ): TraktEpisode = client.getByPaths(*pathEpisodes(traktSlug, seasonNumber, episodeNumber)) {
-        parameterExtended(extended)
-    }
+    ): TraktEpisode =
+        client.getByPaths(*pathEpisodes(traktSlug, seasonNumber, episodeNumber)) {
+            parameterExtended(extended)
+        }
 
     suspend fun getRating(
         traktSlug: String,

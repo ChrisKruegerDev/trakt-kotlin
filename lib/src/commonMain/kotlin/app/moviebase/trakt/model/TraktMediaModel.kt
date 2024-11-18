@@ -4,7 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class TraktMediaType(val value: String) {
+enum class TraktMediaType(
+    val value: String,
+) {
     @SerialName("movie")
     MOVIE("movie"),
 

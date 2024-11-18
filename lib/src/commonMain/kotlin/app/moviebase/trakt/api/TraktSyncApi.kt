@@ -18,19 +18,22 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-class TraktSyncApi(private val client: HttpClient) {
-
+class TraktSyncApi(
+    private val client: HttpClient,
+) {
     suspend fun addWatchedHistory(items: TraktSyncItems): TraktSyncResponse =
-        client.post(urlString = pathSync("history")) {
-            contentType(ContentType.Application.Json)
-            setBody(items)
-        }.body()
+        client
+            .post(urlString = pathSync("history")) {
+                contentType(ContentType.Application.Json)
+                setBody(items)
+            }.body()
 
     suspend fun removeWatchedHistory(items: TraktSyncItems): TraktSyncResponse =
-        client.post(urlString = pathSync("history", "remove")) {
-            contentType(ContentType.Application.Json)
-            setBody(items)
-        }.body()
+        client
+            .post(urlString = pathSync("history", "remove")) {
+                contentType(ContentType.Application.Json)
+                setBody(items)
+            }.body()
 
     suspend fun getSyncList(
         listType: TraktListType,
@@ -39,59 +42,54 @@ class TraktSyncApi(private val client: HttpClient) {
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktMediaItem> = client.getByPaths(pathSyncList(listType, mediaType, itemId)) {
-        extended?.let { parameterExtended(it) }
-        page?.let { parameterPage(it) }
-        limit?.let { parameterLimit(it) }
-    }
+    ): List<TraktMediaItem> =
+        client.getByPaths(pathSyncList(listType, mediaType, itemId)) {
+            extended?.let { parameterExtended(it) }
+            page?.let { parameterPage(it) }
+            limit?.let { parameterLimit(it) }
+        }
 
-    suspend inline fun getWatchedShows(
-        extended: TraktExtended? = null,
-    ): List<TraktMediaItem> = getSyncList(
-        listType = TraktListType.WATCHED,
-        mediaType = TraktListMediaType.SHOWS,
-        extended = extended,
-    )
+    suspend inline fun getWatchedShows(extended: TraktExtended? = null): List<TraktMediaItem> =
+        getSyncList(
+            listType = TraktListType.WATCHED,
+            mediaType = TraktListMediaType.SHOWS,
+            extended = extended,
+        )
 
-    suspend inline fun getWatchedMovies(
-        extended: TraktExtended? = null,
-    ): List<TraktMediaItem> = getSyncList(
-        listType = TraktListType.WATCHED,
-        mediaType = TraktListMediaType.MOVIES,
-        extended = extended,
-    )
+    suspend inline fun getWatchedMovies(extended: TraktExtended? = null): List<TraktMediaItem> =
+        getSyncList(
+            listType = TraktListType.WATCHED,
+            mediaType = TraktListMediaType.MOVIES,
+            extended = extended,
+        )
 
-    suspend inline fun getWatchlistMovies(
-        extended: TraktExtended? = null,
-    ): List<TraktMediaItem> = getSyncList(
-        listType = TraktListType.WATCHLIST,
-        mediaType = TraktListMediaType.MOVIES,
-        extended = extended,
-    )
+    suspend inline fun getWatchlistMovies(extended: TraktExtended? = null): List<TraktMediaItem> =
+        getSyncList(
+            listType = TraktListType.WATCHLIST,
+            mediaType = TraktListMediaType.MOVIES,
+            extended = extended,
+        )
 
-    suspend inline fun getWatchlistShows(
-        extended: TraktExtended? = null,
-    ): List<TraktMediaItem> = getSyncList(
-        listType = TraktListType.WATCHLIST,
-        mediaType = TraktListMediaType.SHOWS,
-        extended = extended,
-    )
+    suspend inline fun getWatchlistShows(extended: TraktExtended? = null): List<TraktMediaItem> =
+        getSyncList(
+            listType = TraktListType.WATCHLIST,
+            mediaType = TraktListMediaType.SHOWS,
+            extended = extended,
+        )
 
-    suspend inline fun getWatchlistSeasons(
-        extended: TraktExtended? = null,
-    ): List<TraktMediaItem> = getSyncList(
-        listType = TraktListType.WATCHLIST,
-        mediaType = TraktListMediaType.SEASONS,
-        extended = extended,
-    )
+    suspend inline fun getWatchlistSeasons(extended: TraktExtended? = null): List<TraktMediaItem> =
+        getSyncList(
+            listType = TraktListType.WATCHLIST,
+            mediaType = TraktListMediaType.SEASONS,
+            extended = extended,
+        )
 
-    suspend inline fun getWatchlistEpisodes(
-        extended: TraktExtended? = null,
-    ): List<TraktMediaItem> = getSyncList(
-        listType = TraktListType.WATCHLIST,
-        mediaType = TraktListMediaType.EPISODES,
-        extended = extended,
-    )
+    suspend inline fun getWatchlistEpisodes(extended: TraktExtended? = null): List<TraktMediaItem> =
+        getSyncList(
+            listType = TraktListType.WATCHLIST,
+            mediaType = TraktListMediaType.EPISODES,
+            extended = extended,
+        )
 
     private fun pathSync(vararg paths: String?) = buildPaths(arrayOf("sync", *paths).filterNotNull())
 

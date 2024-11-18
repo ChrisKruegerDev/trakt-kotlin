@@ -13,35 +13,34 @@ import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import java.io.File
 
-fun mockHttpClient(
-    responses: Map<String, String>,
-) = HttpClient(MockEngine) {
-    val jsonFiles = mutableMapOf<String, String>()
-    responses.entries.forEach {
-        jsonFiles["https://api.trakt.tv/${it.key}"] = it.value
-    }
-    val headers = headersOf("Content-Type" to listOf(ContentType.Application.Json.toString()))
+fun mockHttpClient(responses: Map<String, String>) =
+    HttpClient(MockEngine) {
+        val jsonFiles = mutableMapOf<String, String>()
+        responses.entries.forEach {
+            jsonFiles["https://api.trakt.tv/${it.key}"] = it.value
+        }
+        val headers = headersOf("Content-Type" to listOf(ContentType.Application.Json.toString()))
 
-    defaultRequest {
-        url {
-            protocol = URLProtocol.HTTPS
-            host = TraktWebConfig.HOST
+        defaultRequest {
+            url {
+                protocol = URLProtocol.HTTPS
+                host = TraktWebConfig.HOST
+            }
+        }
+
+        install(ContentNegotiation) {
+            val json = JsonFactory.create()
+            json(json)
+        }
+
+        engine {
+            addHandler { request ->
+                val url = request.url.toString().decodeURLPart()
+
+                val fileName = jsonFiles[url] ?: error("Unhandled url $url")
+                val file = File("./src/jvmTest/resources/trakt/$fileName")
+                val content = file.readText()
+                respond(content = content, headers = headers)
+            }
         }
     }
-
-    install(ContentNegotiation) {
-        val json = JsonFactory.create()
-        json(json)
-    }
-
-    engine {
-        addHandler { request ->
-            val url = request.url.toString().decodeURLPart()
-
-            val fileName = jsonFiles[url] ?: error("Unhandled url $url")
-            val file = File("./src/jvmTest/resources/trakt/$fileName")
-            val content = file.readText()
-            respond(content = content, headers = headers)
-        }
-    }
-}

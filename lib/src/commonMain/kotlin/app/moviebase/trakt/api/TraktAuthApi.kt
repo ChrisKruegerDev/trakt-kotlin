@@ -14,23 +14,24 @@ class TraktAuthApi(
     private val client: HttpClient,
     private val config: TraktClientConfig,
 ) {
-
-    suspend fun postToken(request: TraktTokenRefreshRequest): TraktAccessToken = client.postByPaths("oauth", "token") {
-        contentType(ContentType.Application.Json)
-        setBody(request)
-    }
+    suspend fun postToken(request: TraktTokenRefreshRequest): TraktAccessToken =
+        client.postByPaths("oauth", "token") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
 
     suspend fun requestAccessToken(
         redirectUri: String,
         code: String,
     ): TraktAccessToken {
-        val requestToken = TraktTokenRefreshRequest(
-            clientId = config.traktApiKey,
-            clientSecret = config.clientSecret,
-            redirectUri = redirectUri,
-            grantType = TraktGrantType.AUTHORIZATION_CODE,
-            code = code,
-        )
+        val requestToken =
+            TraktTokenRefreshRequest(
+                clientId = config.traktApiKey,
+                clientSecret = config.clientSecret,
+                redirectUri = redirectUri,
+                grantType = TraktGrantType.AUTHORIZATION_CODE,
+                code = code,
+            )
         return postToken(requestToken)
     }
 
@@ -40,13 +41,14 @@ class TraktAuthApi(
     ): TraktAccessToken {
         require(refreshToken.isNotBlank()) { "refresh token is empty" }
 
-        val requestToken = TraktTokenRefreshRequest(
-            clientId = config.traktApiKey,
-            clientSecret = config.clientSecret,
-            redirectUri = redirectUri,
-            grantType = TraktGrantType.REFRESH_TOKEN,
-            refreshToken = refreshToken,
-        )
+        val requestToken =
+            TraktTokenRefreshRequest(
+                clientId = config.traktApiKey,
+                clientSecret = config.clientSecret,
+                redirectUri = redirectUri,
+                grantType = TraktGrantType.REFRESH_TOKEN,
+                refreshToken = refreshToken,
+            )
         return postToken(requestToken)
     }
 }
