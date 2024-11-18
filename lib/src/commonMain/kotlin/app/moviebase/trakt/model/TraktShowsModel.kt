@@ -32,7 +32,9 @@ data class TraktAirs(
 )
 
 @Serializable
-enum class TraktShowStatus(val value: String) {
+enum class TraktShowStatus(
+    val value: String,
+) {
     @SerialName("returning series")
     RETURNING_SERIES("returning series"),
 

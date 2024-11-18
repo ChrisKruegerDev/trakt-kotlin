@@ -3,7 +3,6 @@ package app.moviebase.trakt.url
 import app.moviebase.trakt.TraktWebConfig
 
 object TraktAuthenticationUrlBuilder {
-
     /**
      * Build an OAuth 2.0 authorization URL to obtain an authorization code.
      * Send the user to the URL. Once the user authorized your app, the server will redirect to `redirectUri`

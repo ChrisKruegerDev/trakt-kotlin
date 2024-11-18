@@ -6,7 +6,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @JvmInline
-value class TraktUserSlug(val name: String) {
+value class TraktUserSlug(
+    val name: String,
+) {
     init {
         // TODO: check here the name
     }
@@ -39,7 +41,6 @@ data class TraktUser(
     @SerialName("vip_og") val vipOg: Boolean = false,
     @SerialName("images") val images: TraktUserImage? = null,
 ) {
-
     val imagePath get() = images?.avatar?.full
     val userId get() = ids?.slug
 }
@@ -112,14 +113,12 @@ data class TraktMediaItem(
     @SerialName("ids") val ids: TraktIds? = null,
     @SerialName("rating") val rating: Int? = null,
     @SerialName("type") val type: TraktMediaType? = null,
-
     @SerialName("seasons") val seasons: List<TraktSeason> = emptyList(),
     @SerialName("movie") val movie: TraktMovie? = null,
     @SerialName("show") val show: TraktShow? = null,
     @SerialName("episode") val episode: TraktEpisode? = null,
     @SerialName("season") val season: TraktSeason? = null,
     @SerialName("plays") val plays: Int = 0,
-
     @SerialName("collected_at") val collectedAt: Instant? = null,
     @SerialName("last_collected_at") val lastCollectedAt: Instant? = null,
     @SerialName("last_watched_at") val lastWatchedAt: Instant? = null,

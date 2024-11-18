@@ -29,7 +29,13 @@ allprojects {
         mavenLocal()
     }
 
-    apply(plugin = rootProject.libs.plugins.spotless.get().pluginId)
+    apply(
+        plugin =
+            rootProject.libs.plugins.spotless
+                .get()
+                .pluginId,
+    )
+
     configure<SpotlessExtension> {
         kotlin {
             target("**/*.kt")

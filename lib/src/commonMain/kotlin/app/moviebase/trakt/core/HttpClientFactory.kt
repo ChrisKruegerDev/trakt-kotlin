@@ -22,7 +22,6 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.CancellationException
 
 internal object HttpClientFactory {
-
     fun create(config: TraktClientConfig): HttpClient {
         val defaultConfig: HttpClientConfig<*>.() -> Unit = {
             val json = JsonFactory.create()

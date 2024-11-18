@@ -10,7 +10,6 @@ import io.ktor.client.plugins.logging.LoggingConfig
 
 @TraktDsl
 class TraktClientConfig {
-
     var traktApiKey: String? = null
     var clientSecret: String? = null
 
@@ -54,16 +53,15 @@ class TraktClientConfig {
     }
 
     companion object {
-
-        internal fun withKey(tmdbApiKey: String) = TraktClientConfig().apply {
-            this.traktApiKey = tmdbApiKey
-        }
+        internal fun withKey(tmdbApiKey: String) =
+            TraktClientConfig().apply {
+                this.traktApiKey = tmdbApiKey
+            }
     }
 }
 
 @TraktDsl
 class TraktAuthCredentials {
-
     internal var refreshTokensProvider: suspend () -> BearerTokens? = { null }
     internal var loadTokensProvider: suspend () -> BearerTokens? = { null }
 

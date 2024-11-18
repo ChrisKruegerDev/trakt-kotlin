@@ -23,8 +23,9 @@ fun Trakt(block: TraktClientConfig.() -> Unit): Trakt {
     return Trakt(config)
 }
 
-class Trakt internal constructor(private val config: TraktClientConfig) {
-
+class Trakt internal constructor(
+    private val config: TraktClientConfig,
+) {
     constructor(traktApiKey: String) : this(TraktClientConfig.withKey(traktApiKey))
 
     val client: HttpClient by lazy {
@@ -54,7 +55,8 @@ class Trakt internal constructor(private val config: TraktClientConfig) {
     val recommendations by buildApi(::TraktRecommendationsApi)
     val comments by buildApi(::TraktCommentsApi)
 
-    private inline fun <T> buildApi(crossinline builder: (HttpClient) -> T) = lazy {
-        builder(client)
-    }
+    private inline fun <T> buildApi(crossinline builder: (HttpClient) -> T) =
+        lazy {
+            builder(client)
+        }
 }

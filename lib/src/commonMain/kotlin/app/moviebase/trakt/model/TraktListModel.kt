@@ -10,7 +10,9 @@ object TraktListCategory {
 }
 
 @Serializable
-enum class TraktListMediaType(val value: String) {
+enum class TraktListMediaType(
+    val value: String,
+) {
     @SerialName("movies")
     MOVIES("movies"),
 
@@ -25,7 +27,9 @@ enum class TraktListMediaType(val value: String) {
 }
 
 @Serializable
-enum class TraktListType(val value: String) {
+enum class TraktListType(
+    val value: String,
+) {
     @SerialName("collection")
     COLLECTION("collection"),
 

@@ -36,7 +36,9 @@ internal object TraktUrlParameter {
     const val EPISODES = "episodes"
 }
 
-enum class TraktExtended(val value: String) {
+enum class TraktExtended(
+    val value: String,
+) {
     FULL("full"),
     NO_SEASONS("noseasons"),
     EPISODES("episodes"),

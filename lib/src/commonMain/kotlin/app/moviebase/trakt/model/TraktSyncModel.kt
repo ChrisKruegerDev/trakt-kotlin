@@ -92,6 +92,5 @@ data class TraktSyncErrors(
     @SerialName("people") val people: List<TraktSyncPerson> = emptyList(),
     @SerialName("ids") val ids: List<Long> = emptyList(),
 ) {
-
     val isEmpty: Boolean get() = listOf(movies, shows, seasons, episodes, people, ids).all { it.isEmpty() }
 }

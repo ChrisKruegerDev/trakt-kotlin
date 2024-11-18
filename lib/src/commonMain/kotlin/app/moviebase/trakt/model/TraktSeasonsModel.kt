@@ -1,4 +1,6 @@
-// ktlint-disable filename
+
+
+@file:Suppress("ktlint:standard:filename")
 
 package app.moviebase.trakt.model
 

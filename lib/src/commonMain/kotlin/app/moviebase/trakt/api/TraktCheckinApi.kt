@@ -11,12 +11,14 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-class TraktCheckinApi(private val client: HttpClient) {
-
-    suspend fun postCheckin(item: TraktCheckinItem): TraktCheckin.Active = client.postByPaths("checkin") {
-        contentType(ContentType.Application.Json)
-        setBody(item)
-    }
+class TraktCheckinApi(
+    private val client: HttpClient,
+) {
+    suspend fun postCheckin(item: TraktCheckinItem): TraktCheckin.Active =
+        client.postByPaths("checkin") {
+            contentType(ContentType.Application.Json)
+            setBody(item)
+        }
 
     suspend fun deleteCheckin(): TraktCheckin.Active = client.delete(urlString = buildPaths("checkin")).body()
 }

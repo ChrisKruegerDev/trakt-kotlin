@@ -14,8 +14,9 @@ import app.moviebase.trakt.model.TraktSearchType
 import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
 
-class TraktSearchApi(private val client: HttpClient) {
-
+class TraktSearchApi(
+    private val client: HttpClient,
+) {
     /**
      * Lookup items by their Trakt, IMDB, TMDB, TVDB, or TVRage ID.
      * URL example: /search/tmdb/:id?type=movie
@@ -29,21 +30,24 @@ class TraktSearchApi(private val client: HttpClient) {
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktSearchResult> = client.getByPaths(*pathSearch(idType.value, id)) {
-        parameter("type", searchType.value)
-        extended?.let { parameterExtended(it) }
-        page?.let { parameterPage(it) }
-        limit?.let { parameterLimit(it) }
-    }
+    ): List<TraktSearchResult> =
+        client.getByPaths(*pathSearch(idType.value, id)) {
+            parameter("type", searchType.value)
+            extended?.let { parameterExtended(it) }
+            page?.let { parameterPage(it) }
+            limit?.let { parameterLimit(it) }
+        }
 
     suspend fun searchTextQuery(
         mediaType: TraktMediaType,
         searchQuery: TraktSearchQuery,
-    ): List<TraktSearchResult> = client.getByPaths(*pathSearch(mediaType.value)) {
-        parameters(searchQuery.parameters)
-    }
+    ): List<TraktSearchResult> =
+        client.getByPaths(*pathSearch(mediaType.value)) {
+            parameters(searchQuery.parameters)
+        }
 
     suspend fun searchTextQueryMovie(searchQuery: TraktSearchQuery) = searchTextQuery(TraktMediaType.MOVIE, searchQuery)
+
     suspend fun searchTextQueryShow(searchQuery: TraktSearchQuery) = searchTextQuery(TraktMediaType.SHOW, searchQuery)
 
     private fun pathSearch(vararg paths: String) = arrayOf("search", *paths)

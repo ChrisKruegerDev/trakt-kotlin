@@ -7,19 +7,21 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 class TraktShowsApiTest {
-
-    val client = mockHttpClient(
-        responses = mapOf(
-            "shows/vikings?extended=full" to "shows/show_summary_vikings.json",
-        ),
-    )
+    val client =
+        mockHttpClient(
+            responses =
+                mapOf(
+                    "shows/vikings?extended=full" to "shows/show_summary_vikings.json",
+                ),
+        )
 
     val classToTest = TraktShowsApi(client)
 
     @Test
-    fun `it can fetch show summary`() = runTest {
-        val traktShow = classToTest.getSummary("vikings", TraktExtended.FULL)
+    fun `it can fetch show summary`() =
+        runTest {
+            val traktShow = classToTest.getSummary("vikings", TraktExtended.FULL)
 
-        assertThat(traktShow.title).isEqualTo("Vikings")
-    }
+            assertThat(traktShow.title).isEqualTo("Vikings")
+        }
 }

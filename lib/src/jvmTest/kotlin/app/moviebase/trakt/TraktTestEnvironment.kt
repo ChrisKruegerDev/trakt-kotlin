@@ -16,10 +16,11 @@ val properties by lazy {
     }
 }
 
-fun createTraktCredentials() = TraktCredentials(
-    accessToken = properties.getProperty("TRAKT_ACCESS_TOKEN"),
-    refreshToken = properties.getProperty("TRAKT_REFRESH_TOKEN"),
-)
+fun createTraktCredentials() =
+    TraktCredentials(
+        accessToken = properties.getProperty("TRAKT_ACCESS_TOKEN"),
+        refreshToken = properties.getProperty("TRAKT_REFRESH_TOKEN"),
+    )
 
 fun buildTrakt(
     traktApiKey: String? = null,
@@ -32,29 +33,29 @@ fun buildTrakt(
 fun defaultTraktConfiguration(
     traktApiKey: String? = null,
     authStore: TraktAuthStore? = null,
-): TraktClientConfig.() -> Unit = {
-    this.traktApiKey = traktApiKey ?: properties.getProperty("TRAKT_CLIENT_ID")
-    requireNotNull(this.traktApiKey)
+): TraktClientConfig.() -> Unit =
+    {
+        this.traktApiKey = traktApiKey ?: properties.getProperty("TRAKT_CLIENT_ID")
+        requireNotNull(this.traktApiKey)
 
-    userAuthentication {
-        refreshTokens { authStore?.bearerTokens }
-        loadTokens { authStore?.bearerTokens }
-    }
+        userAuthentication {
+            refreshTokens { authStore?.bearerTokens }
+            loadTokens { authStore?.bearerTokens }
+        }
 
-    useCache = true
-    useTimeout = true
-    maxRetries = 3
+        useCache = true
+        useTimeout = true
+        maxRetries = 3
 
-    httpClient(OkHttp) {
-        logging {
-            logger = TestLogger()
-            level = LogLevel.HEADERS
+        httpClient(OkHttp) {
+            logging {
+                logger = TestLogger()
+                level = LogLevel.HEADERS
+            }
         }
     }
-}
 
 class TestLogger : Logger {
-
     override fun log(message: String) {
         println("HttpClient: $message")
     }

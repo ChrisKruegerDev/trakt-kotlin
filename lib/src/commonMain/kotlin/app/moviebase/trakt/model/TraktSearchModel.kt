@@ -11,23 +11,27 @@ data class TraktSearchResult(
     val show: TraktShow? = null,
     val episode: TraktEpisode? = null,
 ) {
-
     val ids: TraktItemIds?
-        get() = when {
-            movie != null -> movie.ids
-            episode != null -> episode.ids // could have show and episode
-            show != null -> show.ids
-            else -> null
-        }
+        get() =
+            when {
+                movie != null -> movie.ids
+                episode != null -> episode.ids // could have show and episode
+                show != null -> show.ids
+                else -> null
+            }
 }
 
-enum class TraktIdType(val value: String) {
+enum class TraktIdType(
+    val value: String,
+) {
     IMDB("imdb"),
     TMDB("tmdb"),
     TVDB("tvdb"),
 }
 
-enum class TraktSearchType(val value: String) {
+enum class TraktSearchType(
+    val value: String,
+) {
     MOVIE("movie"),
     SHOW("show"),
     EPISODE("episode"),
@@ -52,21 +56,21 @@ data class TraktSearchQuery(
     @SerialName("page") val page: Int? = null,
     @SerialName("limit") val limit: Int? = null,
 ) {
-
     val parameters: Map<String, String?>
-        get() = mapOf(
-            "query" to query,
-            "years" to years,
-            "genres" to genres,
-            "languages" to languages,
-            "countries" to countries,
-            "runtimes" to runtimes,
-            "ratings" to ratings,
-            "certifications" to certifications,
-            "networks" to networks,
-            "status" to status,
-            "extended" to extended?.value,
-            "page" to page?.toString(),
-            "limit" to limit?.toString(),
-        )
+        get() =
+            mapOf(
+                "query" to query,
+                "years" to years,
+                "genres" to genres,
+                "languages" to languages,
+                "countries" to countries,
+                "runtimes" to runtimes,
+                "ratings" to ratings,
+                "certifications" to certifications,
+                "networks" to networks,
+                "status" to status,
+                "extended" to extended?.value,
+                "page" to page?.toString(),
+                "limit" to limit?.toString(),
+            )
 }

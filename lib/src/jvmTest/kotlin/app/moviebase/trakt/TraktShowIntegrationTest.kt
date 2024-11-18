@@ -9,13 +9,13 @@ import org.junit.jupiter.api.TestInstance
 @Disabled
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TraktShowIntegrationTest {
-
     val trakt = buildTrakt()
 
     @Test
-    fun `get show summary`() = runTest {
-        val show = trakt.shows.getSummary("tom-clancy-s-jack-ryan", TraktExtended.FULL)
+    fun `get show summary`() =
+        runTest {
+            val show = trakt.shows.getSummary("tom-clancy-s-jack-ryan", TraktExtended.FULL)
 
-        assertThat(show).isNotNull()
-    }
+            assertThat(show).isNotNull()
+        }
 }

@@ -4,7 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class TraktGrantType(val value: String) {
+enum class TraktGrantType(
+    val value: String,
+) {
     @SerialName("refresh_token")
     REFRESH_TOKEN("refresh_token"),
 
