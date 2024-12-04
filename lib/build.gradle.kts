@@ -34,9 +34,9 @@ kotlin {
                 api(libs.kotlinx.datetime)
                 api(libs.ktor.core)
                 api(libs.ktor.logging)
-                implementation(libs.ktor.json)
-                implementation(libs.ktor.content.negotiation)
-                implementation(libs.ktor.auth)
+                api(libs.ktor.json)
+                api(libs.ktor.content.negotiation)
+                api(libs.ktor.auth)
             }
         }
         val commonTest by getting {
