@@ -64,7 +64,7 @@ class TraktRateLimitTest {
             useCache = true
             useTimeout = true
 
-            maxRetries = 3
+            maxRequestRetries = 3
 
             var times = timesToFail
 
