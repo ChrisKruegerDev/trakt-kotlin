@@ -45,7 +45,7 @@ fun defaultTraktConfiguration(
 
         useCache = true
         useTimeout = true
-        maxRetries = 3
+        maxRequestRetries = 3
 
         httpClient(OkHttp) {
             logging {

@@ -16,9 +16,9 @@ class TraktClientConfig {
     internal var traktAuthCredentials: TraktAuthCredentials? = null
 
     var expectSuccess: Boolean = true
-    var useCache: Boolean = false
-    var useTimeout: Boolean = false
-    var maxRetries: Int = 5
+    var useCache: Boolean = true
+    var useTimeout: Boolean = true
+    var maxRequestRetries: Int? = 5
 
     internal var httpClientConfigBlock: (HttpClientConfig<*>.() -> Unit)? = null
     internal var httpClientBuilder: (() -> HttpClient)? = null

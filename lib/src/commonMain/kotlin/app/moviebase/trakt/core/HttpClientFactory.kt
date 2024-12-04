@@ -19,7 +19,6 @@ import io.ktor.client.utils.unwrapCancellationException
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.URLProtocol
 import io.ktor.serialization.kotlinx.json.json
-import io.ktor.utils.io.CancellationException
 
 internal object HttpClientFactory {
     fun create(config: TraktClientConfig): HttpClient {
@@ -43,12 +42,10 @@ internal object HttpClientFactory {
                 install(Auth) {
                     bearer {
                         loadTokens {
-                            // TODO: load cached tokens
                             authCredentials.loadTokensProvider()
                         }
 
                         refreshTokens {
-                            // TODO:  add here the 401 handling
                             authCredentials.refreshTokensProvider()
                         }
 
@@ -63,22 +60,23 @@ internal object HttpClientFactory {
             expectSuccess = config.expectSuccess
 
             // see https://ktor.io/docs/client-retry.html
-            install(HttpRequestRetry) {
-                exponentialDelay()
-
-                retryIf(config.maxRetries) { _, httpResponse ->
-                    when {
-                        httpResponse.status.value in 500..599 -> true
-                        httpResponse.status == HttpStatusCode.TooManyRequests -> true
-                        else -> false
+            config.maxRequestRetries?.let {
+                install(HttpRequestRetry) {
+                    exponentialDelay()
+                    retryIf(it) { _, httpResponse ->
+                        when {
+                            httpResponse.status.value in 500..599 -> true
+                            httpResponse.status == HttpStatusCode.TooManyRequests -> true
+                            else -> false
+                        }
                     }
-                }
 
-                retryOnExceptionIf { _, cause ->
-                    when {
-                        cause.isTimeoutException() -> false
-                        cause is CancellationException -> false
-                        else -> true
+                    retryOnExceptionIf(maxRetries = it) { _, cause ->
+                        when {
+                            cause.isTimeoutException() -> false
+                            cause is kotlin.coroutines.cancellation.CancellationException -> false
+                            else -> true
+                        }
                     }
                 }
             }
