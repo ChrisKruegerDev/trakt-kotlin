@@ -5,6 +5,7 @@ import app.moviebase.trakt.api.TraktCheckinApi
 import app.moviebase.trakt.api.TraktCommentsApi
 import app.moviebase.trakt.api.TraktEpisodesApi
 import app.moviebase.trakt.api.TraktMoviesApi
+import app.moviebase.trakt.api.TraktPeopleApi
 import app.moviebase.trakt.api.TraktRecommendationsApi
 import app.moviebase.trakt.api.TraktSearchApi
 import app.moviebase.trakt.api.TraktSeasonsApi
@@ -48,6 +49,7 @@ class Trakt internal constructor(
     val shows by buildApi(::TraktShowsApi)
     val seasons by buildApi(::TraktSeasonsApi)
     val episodes by buildApi(::TraktEpisodesApi)
+    val people by buildApi(::TraktPeopleApi)
     val checkin by buildApi(::TraktCheckinApi)
     val search by buildApi(::TraktSearchApi)
     val users by buildApi(::TraktUsersApi)

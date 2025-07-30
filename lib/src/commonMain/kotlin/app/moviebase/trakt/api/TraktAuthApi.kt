@@ -1,11 +1,14 @@
 package app.moviebase.trakt.api
 
 import app.moviebase.trakt.TraktClientConfig
-import app.moviebase.trakt.core.postByPaths
+import app.moviebase.trakt.core.endPoint
 import app.moviebase.trakt.model.TraktAccessToken
 import app.moviebase.trakt.model.TraktGrantType
 import app.moviebase.trakt.model.TraktTokenRefreshRequest
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -15,10 +18,12 @@ class TraktAuthApi(
     private val config: TraktClientConfig,
 ) {
     suspend fun postToken(request: TraktTokenRefreshRequest): TraktAccessToken =
-        client.postByPaths("oauth", "token") {
-            contentType(ContentType.Application.Json)
-            setBody(request)
-        }
+        client
+            .post {
+                endPointOAuth("token")
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }.body()
 
     suspend fun requestAccessToken(
         redirectUri: String,
@@ -50,5 +55,9 @@ class TraktAuthApi(
                 refreshToken = refreshToken,
             )
         return postToken(requestToken)
+    }
+
+    private fun HttpRequestBuilder.endPointOAuth(vararg paths: String) {
+        endPoint("oauth", *paths)
     }
 }
