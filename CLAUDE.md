@@ -32,13 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Code Quality
 ```bash
-# Run Spotless code formatter check
-./gradlew spotlessCheck
-
-# Apply Spotless code formatting
-./gradlew spotlessApply
-
-# Run all checks (tests + spotless)
+# Run all checks (tests only)
 ./gradlew check
 ```
 
@@ -81,7 +75,6 @@ The project uses Gradle version catalogs (gradle/libs.versions.toml) for depende
 - Ktor 3.0.1 for HTTP client
 - kotlinx-serialization 1.7.3
 - kotlinx-datetime 0.6.1
-- Spotless 7.0.0.BETA4 for code formatting
 
 ### Testing Approach
 
