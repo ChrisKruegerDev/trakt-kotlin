@@ -5,7 +5,6 @@ import app.moviebase.trakt.TraktWebConfig
 import app.moviebase.trakt.model.TraktMediaType
 
 object TraktUrlBuilder {
-
     /**
      * Example: https://trakt.tv/users/andrewbloom
      */
@@ -23,25 +22,26 @@ object TraktUrlBuilder {
         mediaType: TraktMediaType,
         imdbOrTraktId: String,
         seasonNumber: Int? = null,
-        episodeNumber: Int? = null
+        episodeNumber: Int? = null,
     ): String {
         if (imdbOrTraktId.startsWith("tt")) {
             return "${TraktWebConfig.WEBSITE_BASE_URL}/search/imdb/$imdbOrTraktId"
         } else {
-            val mediaTypeParam = if (mediaType == TraktMediaType.MOVIE) {
-                "movies"
-            } else {
-                "shows"
-            }
+            val mediaTypeParam =
+                if (mediaType == TraktMediaType.MOVIE) {
+                    "movies"
+                } else {
+                    "shows"
+                }
 
             var path = "${TraktWebConfig.WEBSITE_BASE_URL}/$mediaTypeParam/$imdbOrTraktId"
 
             if (mediaType == TraktMediaType.SEASON) {
-                path += "/seasons/${seasonNumber}"
+                path += "/seasons/$seasonNumber"
             }
 
             if (mediaType == TraktMediaType.EPISODE) {
-                path += "/episodes/${episodeNumber}"
+                path += "/episodes/$episodeNumber"
             }
 
             return path
