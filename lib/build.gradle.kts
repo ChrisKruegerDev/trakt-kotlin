@@ -1,4 +1,5 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -10,74 +11,67 @@ plugins {
 }
 
 kotlin {
-    jvm()
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "17"
+        }
+    }
+
     js(IR) {
         browser()
         nodejs()
     }
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64(),
-    ).forEach {
-        it.binaries.framework {
+    ).forEach { target ->
+        target.binaries.framework {
             baseName = "app-moviebase-trakt-api"
         }
     }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                api(libs.kotlinx.coroutines.core)
-                api(libs.kotlinx.serialization)
-                api(libs.ktor.serialization.json)
-                api(libs.kotlinx.datetime)
-                api(libs.ktor.core)
-                api(libs.ktor.logging)
-                api(libs.ktor.json)
-                api(libs.ktor.content.negotiation)
-                api(libs.ktor.auth)
-            }
-        }
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test.common)
-                implementation(libs.kotlin.test.annotations)
-            }
+        commonMain.dependencies {
+            api(libs.kotlinx.coroutines.core)
+            api(libs.kotlinx.serialization)
+            api(libs.kotlinx.datetime)
+            api(libs.ktor.core)
+            implementation(libs.ktor.json)
+            implementation(libs.ktor.logging)
+            implementation(libs.ktor.serialization.json)
+            implementation(libs.ktor.content.negotiation)
+            implementation(libs.ktor.auth)
         }
 
-        val jvmMain by getting {
-            dependencies {
-                implementation(libs.ktor.okhttp)
-            }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test.common)
+            implementation(libs.kotlin.test.annotations)
         }
 
-        val jvmTest by getting {
-            dependencies {
-                implementation(libs.ktor.okhttp)
-                implementation(libs.ktor.mock)
-
-                implementation(libs.kotlinx.coroutines.core)
-                implementation(libs.kotlinx.coroutines.test)
-                implementation(libs.kotlin.junit5)
-                implementation(libs.junit)
-                implementation(libs.junit.jupiter.api)
-                runtimeOnly(libs.junit.jupiter.engine)
-                implementation(libs.truth)
-            }
+        jvmMain.dependencies {
+            implementation(libs.ktor.okhttp)
         }
 
-        val jsMain by getting {
+        jvmTest.dependencies {
+            implementation(libs.ktor.okhttp)
+            implementation(libs.ktor.mock)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.kotlin.junit5)
+            implementation(libs.junit)
+            implementation(libs.junit.jupiter.api)
+            runtimeOnly(libs.junit.jupiter.engine)
+            implementation(libs.truth)
         }
 
-        val iosX64Main by getting
-        val iosArm64Main by getting  
-        val iosSimulatorArm64Main by getting
-        
-        configure(listOf(iosX64Main, iosArm64Main, iosSimulatorArm64Main)) {
-            dependencies {
-                implementation(libs.ktor.darwin)
-            }
+        iosMain.dependencies {
+            implementation(libs.ktor.darwin)
+        }
+
+        iosTest.dependencies {
+            implementation(libs.ktor.darwin)
         }
     }
 }
