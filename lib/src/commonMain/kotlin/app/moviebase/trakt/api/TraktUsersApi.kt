@@ -24,7 +24,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 class TraktUsersApi(
     private val client: HttpClient,

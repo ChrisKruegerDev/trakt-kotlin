@@ -6,7 +6,7 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.parameter
 import io.ktor.http.path
 import io.ktor.http.takeFrom
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 fun HttpRequestBuilder.endPoint(vararg paths: String) {
     url {

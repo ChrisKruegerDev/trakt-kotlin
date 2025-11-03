@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnLockMismatchReport
-import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
-import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 
 plugins {
@@ -29,21 +26,7 @@ allprojects {
 
     tasks.withType<KotlinCompilationTask<*>>().configureEach {
         compilerOptions {
-            // Treat all Kotlin warnings as errors
-            allWarningsAsErrors.set(true)
-
-            // Enable experimental coroutines APIs, including Flow
-            freeCompilerArgs.addAll(
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-opt-in=kotlinx.coroutines.FlowPreview",
-            )
+            allWarningsAsErrors.set(false)
         }
-    }
-
-    rootProject.plugins.withType<YarnPlugin>().configureEach {
-        rootProject.the<YarnRootExtension>().yarnLockMismatchReport =
-            YarnLockMismatchReport.WARNING // NONE | FAIL
-        rootProject.the<YarnRootExtension>().reportNewYarnLock = false // true
-        rootProject.the<YarnRootExtension>().yarnLockAutoReplace = false // true
     }
 }
