@@ -17,6 +17,7 @@ class TraktAuthApi(
     private val client: HttpClient,
     private val config: TraktClientConfig,
 ) {
+
     suspend fun postToken(request: TraktTokenRefreshRequest): TraktAccessToken =
         client
             .post {

@@ -9,9 +9,6 @@ import kotlinx.serialization.Serializable
 value class TraktUserSlug(
     val name: String,
 ) {
-    init {
-        // TODO: check here the name
-    }
 
     companion object {
         val ME = TraktUserSlug("me")

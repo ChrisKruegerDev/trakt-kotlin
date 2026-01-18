@@ -1,5 +1,3 @@
-@file:Suppress("ktlint:standard:filename")
-
 package app.moviebase.trakt.model
 
 import kotlin.time.Instant

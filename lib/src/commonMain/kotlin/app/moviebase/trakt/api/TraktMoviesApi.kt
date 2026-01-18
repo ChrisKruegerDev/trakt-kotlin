@@ -17,6 +17,7 @@ import io.ktor.client.request.get
 class TraktMoviesApi(
     private val client: HttpClient,
 ) {
+
     suspend fun getTrending(
         page: Int,
         limit: Int,
