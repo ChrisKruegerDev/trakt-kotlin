@@ -5,9 +5,15 @@ import app.moviebase.trakt.core.endPoint
 import app.moviebase.trakt.core.parameterExtended
 import app.moviebase.trakt.core.parameterLimit
 import app.moviebase.trakt.core.parameterPage
+import app.moviebase.trakt.model.TraktComment
+import app.moviebase.trakt.model.TraktCredits
 import app.moviebase.trakt.model.TraktEpisode
+import app.moviebase.trakt.model.TraktList
 import app.moviebase.trakt.model.TraktRating
+import app.moviebase.trakt.model.TraktStats
 import app.moviebase.trakt.model.TraktSeason
+import app.moviebase.trakt.model.TraktTranslation
+import app.moviebase.trakt.model.TraktUser
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -22,12 +28,10 @@ class TraktSeasonsApi(
     suspend fun getSummary(
         showId: String,
         extended: TraktExtended? = null,
-    ): List<TraktSeason> =
-        client
-            .get {
-                endPoint("shows", showId, "seasons")
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): List<TraktSeason> = client.get {
+        endPoint("shows", showId, "seasons")
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     /**
      * Returns all episodes for a specific season of a show.
@@ -36,12 +40,10 @@ class TraktSeasonsApi(
         showId: String,
         seasonNumber: Int,
         extended: TraktExtended? = null,
-    ): List<TraktEpisode> =
-        client
-            .get {
-                endPointSeasons(showId, seasonNumber)
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): List<TraktEpisode> = client.get {
+        endPointSeasons(showId, seasonNumber)
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     /**
      * Returns rating (between 0 and 10) and distribution for a season.
@@ -50,11 +52,9 @@ class TraktSeasonsApi(
     suspend fun getRatings(
         showId: String,
         seasonNumber: Int,
-    ): TraktRating =
-        client
-            .get {
-                endPointSeasons(showId, seasonNumber, "ratings")
-            }.body()
+    ): TraktRating = client.get {
+        endPointSeasons(showId, seasonNumber, "ratings")
+    }.body()
 
     /**
      * Returns stats (watchers, plays, collectors, etc.) for a season.
@@ -62,11 +62,9 @@ class TraktSeasonsApi(
     suspend fun getStats(
         showId: String,
         seasonNumber: Int,
-    ): TraktRating =
-        client
-            .get {
-                endPointSeasons(showId, seasonNumber, "stats")
-            }.body()
+    ): TraktStats = client.get {
+        endPointSeasons(showId, seasonNumber, "stats")
+    }.body()
 
     /**
      * Returns translation data for a season.
@@ -75,11 +73,13 @@ class TraktSeasonsApi(
         showId: String,
         seasonNumber: Int,
         language: String? = null,
-    ): List<TraktSeason> =
-        client
-            .get {
-                endPointSeasons(showId, seasonNumber, "translations", language ?: "")
-            }.body()
+    ): List<TraktTranslation> = client.get {
+        if (language != null) {
+            endPointSeasons(showId, seasonNumber, "translations", language)
+        } else {
+            endPointSeasons(showId, seasonNumber, "translations")
+        }
+    }.body()
 
     /**
      * Returns all top level comments for a season.
@@ -90,13 +90,51 @@ class TraktSeasonsApi(
         sort: String = "newest",
         page: Int = 1,
         limit: Int = 10,
-    ): List<TraktSeason> =
-        client
-            .get {
-                endPointSeasons(showId, seasonNumber, "comments", sort)
-                parameterPage(page)
-                parameterLimit(limit)
-            }.body()
+    ): List<TraktComment> = client.get {
+        endPointSeasons(showId, seasonNumber, "comments", sort)
+        parameterPage(page)
+        parameterLimit(limit)
+    }.body()
+
+    /**
+     * Returns lists that contain this season.
+     */
+    suspend fun getLists(
+        showId: String,
+        seasonNumber: Int,
+        type: String = "personal",
+        sort: String = "popular",
+        page: Int = 1,
+        limit: Int = 10,
+    ): List<TraktList> = client.get {
+        endPointSeasons(showId, seasonNumber, "lists", type, sort)
+        parameterPage(page)
+        parameterLimit(limit)
+    }.body()
+
+    /**
+     * Returns all cast and crew for a season.
+     */
+    suspend fun getPeople(
+        showId: String,
+        seasonNumber: Int,
+        extended: TraktExtended? = null,
+    ): TraktCredits = client.get {
+        endPointSeasons(showId, seasonNumber, "people")
+        extended?.let { parameterExtended(it) }
+    }.body()
+
+    /**
+     * Returns all users watching this season right now.
+     */
+    suspend fun getUsersWatching(
+        showId: String,
+        seasonNumber: Int,
+        extended: TraktExtended? = null,
+    ): List<TraktUser> = client.get {
+        endPointSeasons(showId, seasonNumber, "watching")
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     /**
      * Path: /shows/id/seasons/season/...

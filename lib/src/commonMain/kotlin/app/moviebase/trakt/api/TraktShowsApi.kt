@@ -5,10 +5,22 @@ import app.moviebase.trakt.core.endPoint
 import app.moviebase.trakt.core.parameterExtended
 import app.moviebase.trakt.core.parameterLimit
 import app.moviebase.trakt.core.parameterPage
+import app.moviebase.trakt.model.TraktAlias
 import app.moviebase.trakt.model.TraktAnticipatedShow
+import app.moviebase.trakt.model.TraktCertification
+import app.moviebase.trakt.model.TraktComment
+import app.moviebase.trakt.model.TraktCredits
+import app.moviebase.trakt.model.TraktEpisode
+import app.moviebase.trakt.model.TraktList
 import app.moviebase.trakt.model.TraktRating
+import app.moviebase.trakt.model.TraktStats
 import app.moviebase.trakt.model.TraktShow
+import app.moviebase.trakt.model.TraktShowProgress
+import app.moviebase.trakt.model.TraktShowUpdate
+import app.moviebase.trakt.model.TraktStudio
+import app.moviebase.trakt.model.TraktTranslation
 import app.moviebase.trakt.model.TraktTrendingShow
+import app.moviebase.trakt.model.TraktUser
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -22,151 +34,199 @@ class TraktShowsApi(
         page: Int,
         limit: Int,
         extended: TraktExtended? = null,
-    ): List<TraktTrendingShow> =
-        client
-            .get {
-                endPointShows("trending")
-                parameterPage(page)
-                parameterLimit(limit)
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): List<TraktTrendingShow> = client.get {
+        endPointShows("trending")
+        parameterPage(page)
+        parameterLimit(limit)
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     suspend fun getPopular(
         page: Int,
         limit: Int,
         extended: TraktExtended? = null,
-    ): List<TraktShow> =
-        client
-            .get {
-                endPointShows("popular")
-                parameterPage(page)
-                parameterLimit(limit)
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): List<TraktShow> = client.get {
+        endPointShows("popular")
+        parameterPage(page)
+        parameterLimit(limit)
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     suspend fun getAnticipated(
         page: Int,
         limit: Int,
         extended: TraktExtended? = null,
-    ): List<TraktAnticipatedShow> =
-        client
-            .get {
-                endPointShows("anticipated")
-                parameterPage(page)
-                parameterLimit(limit)
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): List<TraktAnticipatedShow> = client.get {
+        endPointShows("anticipated")
+        parameterPage(page)
+        parameterLimit(limit)
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     suspend fun getPlayed(
         page: Int,
         limit: Int,
         extended: TraktExtended? = null,
-    ): List<TraktShow> =
-        client
-            .get {
-                endPointShows("played")
-                parameterPage(page)
-                parameterLimit(limit)
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): List<TraktShow> = client.get {
+        endPointShows("played")
+        parameterPage(page)
+        parameterLimit(limit)
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     suspend fun getWatched(
         page: Int,
         limit: Int,
         extended: TraktExtended? = null,
-    ): List<TraktShow> =
-        client
-            .get {
-                endPointShows("watched")
-                parameterPage(page)
-                parameterLimit(limit)
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): List<TraktShow> = client.get {
+        endPointShows("watched")
+        parameterPage(page)
+        parameterLimit(limit)
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     suspend fun getCollected(
         page: Int,
         limit: Int,
         extended: TraktExtended? = null,
-    ): List<TraktShow> =
-        client
-            .get {
-                endPointShows("collected")
-                parameterPage(page)
-                parameterLimit(limit)
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): List<TraktShow> = client.get {
+        endPointShows("collected")
+        parameterPage(page)
+        parameterLimit(limit)
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     suspend fun getRelated(
         showId: String,
         page: Int,
         limit: Int,
         extended: TraktExtended? = null,
-    ): List<TraktShow> =
-        client
-            .get {
-                endPointShow(showId, "related")
-                parameterPage(page)
-                parameterLimit(limit)
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): List<TraktShow> = client.get {
+        endPointShow(showId, "related")
+        parameterPage(page)
+        parameterLimit(limit)
+        extended?.let { parameterExtended(it) }
+    }.body()
 
     suspend fun getSummary(
         showId: String,
         extended: TraktExtended? = null,
-    ): TraktShow =
-        client
-            .get {
-                endPointShows(showId)
-                extended?.let { parameterExtended(it) }
-            }.body()
+    ): TraktShow = client.get {
+        endPointShows(showId)
+        extended?.let { parameterExtended(it) }
+    }.body()
 
-    suspend fun getRating(traktSlug: String): TraktRating =
-        client
-            .get {
-                endPointShow(traktSlug, "ratings")
-            }.body()
+    suspend fun getRating(traktSlug: String): TraktRating = client.get {
+        endPointShow(traktSlug, "ratings")
+    }.body()
 
-    suspend fun getStats(traktSlug: String): TraktRating =
-        client
-            .get {
-                endPointShow(traktSlug, "stats")
-            }.body()
+    suspend fun getStats(traktSlug: String): TraktStats = client.get {
+        endPointShow(traktSlug, "stats")
+    }.body()
 
     suspend fun getTranslations(
         showId: String,
         language: String? = null,
-    ): List<TraktShow> =
-        client
-            .get {
-                endPointShow(showId, "translations", language ?: "")
-            }.body()
+    ): List<TraktTranslation> = client.get {
+        if (language != null) {
+            endPointShow(showId, "translations", language)
+        } else {
+            endPointShow(showId, "translations")
+        }
+    }.body()
 
     suspend fun getComments(
         showId: String,
         sort: String = "newest",
         page: Int = 1,
         limit: Int = 10,
-    ): List<TraktShow> =
-        client
-            .get {
-                endPointShow(showId, "comments", sort)
-                parameterPage(page)
-                parameterLimit(limit)
-            }.body()
+    ): List<TraktComment> = client.get {
+        endPointShow(showId, "comments", sort)
+        parameterPage(page)
+        parameterLimit(limit)
+    }.body()
 
     suspend fun getProgress(
         showId: String,
         hidden: Boolean = false,
         specials: Boolean = false,
         countSpecials: Boolean = true,
-    ): TraktShow =
-        client
-            .get {
-                endPointShow(showId, "progress", "watched")
-                parameter("hidden", hidden)
-                parameter("specials", specials)
-                parameter("count_specials", countSpecials)
-            }.body()
+    ): TraktShowProgress = client.get {
+        endPointShow(showId, "progress", "watched")
+        parameter("hidden", hidden)
+        parameter("specials", specials)
+        parameter("count_specials", countSpecials)
+    }.body()
+
+    suspend fun getUpdates(
+        startDate: String? = null,
+        page: Int = 1,
+        limit: Int = 10,
+    ): List<TraktShowUpdate> = client.get {
+        if (startDate != null) {
+            endPointShows("updates", startDate)
+        } else {
+            endPointShows("updates")
+        }
+        parameterPage(page)
+        parameterLimit(limit)
+    }.body()
+
+    suspend fun getAliases(showId: String): List<TraktAlias> = client.get {
+        endPointShow(showId, "aliases")
+    }.body()
+
+    suspend fun getCertifications(showId: String): List<TraktCertification> = client.get {
+        endPointShow(showId, "certifications")
+    }.body()
+
+    suspend fun getNextEpisode(
+        showId: String,
+        extended: TraktExtended? = null,
+    ): TraktEpisode? = client.get {
+        endPointShow(showId, "next_episode")
+        extended?.let { parameterExtended(it) }
+    }.body()
+
+    suspend fun getLastEpisode(
+        showId: String,
+        extended: TraktExtended? = null,
+    ): TraktEpisode? = client.get {
+        endPointShow(showId, "last_episode")
+        extended?.let { parameterExtended(it) }
+    }.body()
+
+    suspend fun getLists(
+        showId: String,
+        type: String = "personal",
+        sort: String = "popular",
+        page: Int = 1,
+        limit: Int = 10,
+    ): List<TraktList> = client.get {
+        endPointShow(showId, "lists", type, sort)
+        parameterPage(page)
+        parameterLimit(limit)
+    }.body()
+
+    suspend fun getPeople(
+        showId: String,
+        extended: TraktExtended? = null,
+    ): TraktCredits = client.get {
+        endPointShow(showId, "people")
+        extended?.let { parameterExtended(it) }
+    }.body()
+
+    suspend fun getUsersWatching(
+        showId: String,
+        extended: TraktExtended? = null,
+    ): List<TraktUser> = client.get {
+        endPointShow(showId, "watching")
+        extended?.let { parameterExtended(it) }
+    }.body()
+
+    suspend fun getStudios(showId: String): List<TraktStudio> = client.get {
+        endPointShow(showId, "studios")
+    }.body()
 
     private fun HttpRequestBuilder.endPointShow(
         traktSlug: String,

@@ -104,23 +104,135 @@ data class TraktUserListItem(
     @SerialName("person") val person: TraktPerson? = null,
 )
 
-// TODO: Split into separate media classes (via sealed)?
 @Serializable
-data class TraktMediaItem(
-    @SerialName("ids") val ids: TraktIds? = null,
-    @SerialName("rating") val rating: Int? = null,
-    @SerialName("type") val type: TraktMediaType? = null,
-    @SerialName("seasons") val seasons: List<TraktSeason> = emptyList(),
-    @SerialName("movie") val movie: TraktMovie? = null,
-    @SerialName("show") val show: TraktShow? = null,
-    @SerialName("episode") val episode: TraktEpisode? = null,
-    @SerialName("season") val season: TraktSeason? = null,
+data class TraktFollower(
+    @SerialName("followed_at") val followedAt: Instant? = null,
+    @SerialName("user") val user: TraktUser? = null,
+)
+
+@Serializable
+data class TraktFollowResponse(
+    @SerialName("approved_at") val approvedAt: Instant? = null,
+    @SerialName("user") val user: TraktUser? = null,
+)
+
+@Serializable
+data class TraktFollowRequest(
+    @SerialName("id") val id: Int,
+    @SerialName("requested_at") val requestedAt: Instant,
+    @SerialName("user") val user: TraktUser,
+)
+
+@Serializable
+data class TraktLike(
+    @SerialName("liked_at") val likedAt: Instant,
+    @SerialName("type") val type: String,
+    @SerialName("list") val list: TraktList? = null,
+    @SerialName("comment") val comment: TraktComment? = null,
+)
+
+/**
+ * Common interface for media items returned from sync and user endpoints.
+ * All implementations contain at least movie and show fields.
+ */
+sealed interface TraktMediaItem {
+    val movie: TraktMovie?
+    val show: TraktShow?
+}
+
+/**
+ * Response item from sync/watched/movies and sync/watched/shows endpoints.
+ */
+@Serializable
+data class TraktWatchedItem(
     @SerialName("plays") val plays: Int = 0,
-    @SerialName("collected_at") val collectedAt: Instant? = null,
-    @SerialName("last_collected_at") val lastCollectedAt: Instant? = null,
     @SerialName("last_watched_at") val lastWatchedAt: Instant? = null,
     @SerialName("last_updated_at") val lastUpdatedAt: Instant? = null,
-    @SerialName("rated_at") val ratedAt: Instant? = null,
+    @SerialName("reset_at") val resetAt: Instant? = null,
+    @SerialName("movie") override val movie: TraktMovie? = null,
+    @SerialName("show") override val show: TraktShow? = null,
+    @SerialName("seasons") val seasons: List<TraktSeason> = emptyList(),
+) : TraktMediaItem
+
+/**
+ * Response item from sync/collection/movies and sync/collection/shows endpoints.
+ */
+@Serializable
+data class TraktCollectionItem(
+    @SerialName("collected_at") val collectedAt: Instant? = null,
+    @SerialName("last_collected_at") val lastCollectedAt: Instant? = null,
+    @SerialName("last_updated_at") val lastUpdatedAt: Instant? = null,
+    @SerialName("movie") override val movie: TraktMovie? = null,
+    @SerialName("show") override val show: TraktShow? = null,
+    @SerialName("seasons") val seasons: List<TraktSeason> = emptyList(),
+) : TraktMediaItem
+
+/**
+ * Response item from sync/watchlist endpoints.
+ */
+@Serializable
+data class TraktWatchlistItem(
+    @SerialName("rank") val rank: Int = 0,
+    @SerialName("id") val id: Long = 0,
     @SerialName("listed_at") val listedAt: Instant? = null,
+    @SerialName("notes") val notes: String? = null,
+    @SerialName("type") val type: TraktMediaType? = null,
+    @SerialName("movie") override val movie: TraktMovie? = null,
+    @SerialName("show") override val show: TraktShow? = null,
+    @SerialName("season") val season: TraktSeason? = null,
+    @SerialName("episode") val episode: TraktEpisode? = null,
+) : TraktMediaItem
+
+/**
+ * Response item from sync/ratings endpoints.
+ */
+@Serializable
+data class TraktRatedItem(
+    @SerialName("rating") val rating: Int = 0,
+    @SerialName("rated_at") val ratedAt: Instant? = null,
+    @SerialName("type") val type: TraktMediaType? = null,
+    @SerialName("movie") override val movie: TraktMovie? = null,
+    @SerialName("show") override val show: TraktShow? = null,
+    @SerialName("season") val season: TraktSeason? = null,
+    @SerialName("episode") val episode: TraktEpisode? = null,
+) : TraktMediaItem
+
+/**
+ * Response item from users/hidden endpoints.
+ */
+@Serializable
+data class TraktHiddenItem(
     @SerialName("hidden_at") val hiddenAt: Instant? = null,
-)
+    @SerialName("type") val type: TraktMediaType? = null,
+    @SerialName("movie") override val movie: TraktMovie? = null,
+    @SerialName("show") override val show: TraktShow? = null,
+    @SerialName("season") val season: TraktSeason? = null,
+) : TraktMediaItem
+
+/**
+ * Response item from users/favorites endpoints.
+ */
+@Serializable
+data class TraktFavoriteItem(
+    @SerialName("rank") val rank: Int = 0,
+    @SerialName("id") val id: Long = 0,
+    @SerialName("listed_at") val listedAt: Instant? = null,
+    @SerialName("notes") val notes: String? = null,
+    @SerialName("type") val type: TraktMediaType? = null,
+    @SerialName("movie") override val movie: TraktMovie? = null,
+    @SerialName("show") override val show: TraktShow? = null,
+) : TraktMediaItem
+
+/**
+ * Response item from comments/:id/item endpoint.
+ * Returns the media item a comment is attached to.
+ */
+@Serializable
+data class TraktCommentItem(
+    @SerialName("type") val type: TraktMediaType? = null,
+    @SerialName("movie") override val movie: TraktMovie? = null,
+    @SerialName("show") override val show: TraktShow? = null,
+    @SerialName("season") val season: TraktSeason? = null,
+    @SerialName("episode") val episode: TraktEpisode? = null,
+    @SerialName("list") val list: TraktList? = null,
+) : TraktMediaItem

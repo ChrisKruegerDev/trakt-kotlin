@@ -1,0 +1,71 @@
+{
+  "cast": [
+    {
+      "character": "Paul Atreides",
+      "characters": ["Paul Atreides"],
+      "person": {
+        "name": "Timothee Chalamet",
+        "ids": {
+          "trakt": 123456,
+          "slug": "timothee-chalamet",
+          "imdb": "nm3154303",
+          "tmdb": 1190668
+        }
+      }
+    },
+    {
+      "character": "Lady Jessica",
+      "characters": ["Lady Jessica"],
+      "person": {
+        "name": "Rebecca Ferguson",
+        "ids": {
+          "trakt": 123457,
+          "slug": "rebecca-ferguson",
+          "imdb": "nm0272581",
+          "tmdb": 933238
+        }
+      }
+    }
+  ],
+  "crew": {
+    "directing": [
+      {
+        "job": "Director",
+        "jobs": ["Director"],
+        "person": {
+          "name": "Denis Villeneuve",
+          "ids": {
+            "trakt": 789012,
+            "slug": "denis-villeneuve",
+            "imdb": "nm0898288",
+            "tmdb": 137427
+          }
+        }
+      }
+    ],
+    "writing": [
+      {
+        "job": "Writer",
+        "jobs": ["Screenplay"],
+        "person": {
+          "name": "Jon Spaihts",
+          "ids": {
+            "trakt": 789013,
+            "slug": "jon-spaihts",
+            "imdb": "nm2480562",
+            "tmdb": 75149
+          }
+        }
+      }
+    ],
+    "production": [],
+    "art": [],
+    "crew": [],
+    "costume & make-up": [],
+    "sound": [],
+    "camera": [],
+    "visual effects": [],
+    "lighting": [],
+    "editing": []
+  }
+}

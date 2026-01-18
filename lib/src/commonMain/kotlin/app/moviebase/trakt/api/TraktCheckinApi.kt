@@ -14,17 +14,13 @@ import io.ktor.http.contentType
 class TraktCheckinApi(
     private val client: HttpClient,
 ) {
-    suspend fun postCheckin(item: TraktCheckinItem): TraktCheckin.Active =
-        client
-            .post {
-                endPoint("checkin")
-                contentType(ContentType.Application.Json)
-                setBody(item)
-            }.body()
+    suspend fun postCheckin(item: TraktCheckinItem): TraktCheckin.Active = client.post {
+        endPoint("checkin")
+        contentType(ContentType.Application.Json)
+        setBody(item)
+    }.body()
 
-    suspend fun deleteCheckin(): TraktCheckin.Active =
-        client
-            .delete {
-                endPoint("checkin")
-            }.body()
+    suspend fun deleteCheckin(): TraktCheckin.Active = client.delete {
+        endPoint("checkin")
+    }.body()
 }

@@ -1,0 +1,46 @@
+[
+  {
+    "id": 12345,
+    "progress": 45.5,
+    "paused_at": "2024-01-15T10:30:00.000Z",
+    "type": "movie",
+    "movie": {
+      "title": "Dune: Part Two",
+      "year": 2024,
+      "ids": {
+        "trakt": 546896,
+        "slug": "dune-part-two-2024",
+        "imdb": "tt15239678",
+        "tmdb": 693134
+      }
+    }
+  },
+  {
+    "id": 12346,
+    "progress": 65.0,
+    "paused_at": "2024-01-14T20:15:00.000Z",
+    "type": "episode",
+    "episode": {
+      "season": 5,
+      "number": 2,
+      "title": "Churn",
+      "ids": {
+        "trakt": 123458,
+        "tvdb": 654323,
+        "imdb": "tt1234569",
+        "tmdb": 111224
+      }
+    },
+    "show": {
+      "title": "The Expanse",
+      "year": 2015,
+      "ids": {
+        "trakt": 77199,
+        "slug": "the-expanse",
+        "tvdb": 280619,
+        "imdb": "tt3230854",
+        "tmdb": 63639
+      }
+    }
+  }
+]

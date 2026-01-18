@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Legendary Pictures",
+    "country": "us",
+    "ids": {
+      "trakt": 1001,
+      "slug": "legendary-pictures",
+      "tmdb": 923
+    }
+  },
+  {
+    "name": "Warner Bros. Pictures",
+    "country": "us",
+    "ids": {
+      "trakt": 1002,
+      "slug": "warner-bros-pictures",
+      "tmdb": 174
+    }
+  }
+]

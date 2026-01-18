@@ -1,0 +1,30 @@
+[
+  {
+    "id": 12345,
+    "rank": 1,
+    "listed_at": "2024-01-15T12:00:00.000Z",
+    "type": "movie",
+    "movie": {
+      "ids": {
+        "trakt": 546896,
+        "slug": "dune-part-two-2024",
+        "imdb": "tt15239678",
+        "tmdb": 693134
+      }
+    }
+  },
+  {
+    "id": 12346,
+    "rank": 2,
+    "listed_at": "2024-01-14T10:00:00.000Z",
+    "type": "movie",
+    "movie": {
+      "ids": {
+        "trakt": 496243,
+        "slug": "blade-runner-2049-2017",
+        "imdb": "tt1856101",
+        "tmdb": 335984
+      }
+    }
+  }
+]

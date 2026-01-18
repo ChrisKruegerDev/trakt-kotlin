@@ -1,12 +1,20 @@
 package app.moviebase.trakt
 
 import app.moviebase.trakt.api.TraktAuthApi
+import app.moviebase.trakt.api.TraktCalendarsApi
+import app.moviebase.trakt.api.TraktCertificationsApi
 import app.moviebase.trakt.api.TraktCheckinApi
 import app.moviebase.trakt.api.TraktCommentsApi
+import app.moviebase.trakt.api.TraktCountriesApi
 import app.moviebase.trakt.api.TraktEpisodesApi
+import app.moviebase.trakt.api.TraktGenresApi
+import app.moviebase.trakt.api.TraktLanguagesApi
+import app.moviebase.trakt.api.TraktListsApi
 import app.moviebase.trakt.api.TraktMoviesApi
+import app.moviebase.trakt.api.TraktNetworksApi
 import app.moviebase.trakt.api.TraktPeopleApi
 import app.moviebase.trakt.api.TraktRecommendationsApi
+import app.moviebase.trakt.api.TraktScrobbleApi
 import app.moviebase.trakt.api.TraktSearchApi
 import app.moviebase.trakt.api.TraktSeasonsApi
 import app.moviebase.trakt.api.TraktShowsApi
@@ -56,6 +64,16 @@ class Trakt internal constructor(
     val sync by buildApi(::TraktSyncApi)
     val recommendations by buildApi(::TraktRecommendationsApi)
     val comments by buildApi(::TraktCommentsApi)
+
+    // New APIs
+    val certifications by buildApi(::TraktCertificationsApi)
+    val genres by buildApi(::TraktGenresApi)
+    val networks by buildApi(::TraktNetworksApi)
+    val countries by buildApi(::TraktCountriesApi)
+    val languages by buildApi(::TraktLanguagesApi)
+    val calendars by buildApi(::TraktCalendarsApi)
+    val scrobble by buildApi(::TraktScrobbleApi)
+    val lists by buildApi(::TraktListsApi)
 
     private inline fun <T> buildApi(crossinline builder: (HttpClient) -> T) =
         lazy {

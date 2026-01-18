@@ -1,0 +1,14 @@
+[
+  {
+    "id": 12345,
+    "requested_at": "2024-01-15T10:00:00.000Z",
+    "user": {
+      "username": "johndoe",
+      "name": "John Doe",
+      "vip": false,
+      "ids": {
+        "slug": "johndoe"
+      }
+    }
+  }
+]

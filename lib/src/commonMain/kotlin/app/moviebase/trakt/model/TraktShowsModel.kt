@@ -62,3 +62,37 @@ data class TraktAnticipatedShow(
     @SerialName("show") val show: TraktShow? = null,
     @SerialName("list_count") val listCount: Int? = null,
 )
+
+@Serializable
+data class TraktShowUpdate(
+    @SerialName("updated_at") val updatedAt: Instant,
+    @SerialName("show") val show: TraktShow,
+)
+
+@Serializable
+data class TraktShowProgress(
+    @SerialName("aired") val aired: Int = 0,
+    @SerialName("completed") val completed: Int = 0,
+    @SerialName("last_watched_at") val lastWatchedAt: Instant? = null,
+    @SerialName("reset_at") val resetAt: Instant? = null,
+    @SerialName("seasons") val seasons: List<TraktSeasonProgress> = emptyList(),
+    @SerialName("hidden_seasons") val hiddenSeasons: List<TraktSeason> = emptyList(),
+    @SerialName("next_episode") val nextEpisode: TraktEpisode? = null,
+    @SerialName("last_episode") val lastEpisode: TraktEpisode? = null,
+)
+
+@Serializable
+data class TraktSeasonProgress(
+    @SerialName("number") val number: Int,
+    @SerialName("title") val title: String? = null,
+    @SerialName("aired") val aired: Int = 0,
+    @SerialName("completed") val completed: Int = 0,
+    @SerialName("episodes") val episodes: List<TraktEpisodeProgress> = emptyList(),
+)
+
+@Serializable
+data class TraktEpisodeProgress(
+    @SerialName("number") val number: Int,
+    @SerialName("completed") val completed: Boolean = false,
+    @SerialName("last_watched_at") val lastWatchedAt: Instant? = null,
+)

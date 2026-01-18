@@ -33,25 +33,21 @@ class TraktSearchApi(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktSearchResult> =
-        client
-            .get {
-                endPointSearch(idType.value, id)
-                parameter("type", searchType.value)
-                extended?.let { parameterExtended(it) }
-                page?.let { parameterPage(it) }
-                limit?.let { parameterLimit(it) }
-            }.body()
+    ): List<TraktSearchResult> = client.get {
+        endPointSearch(idType.value, id)
+        parameter("type", searchType.value)
+        extended?.let { parameterExtended(it) }
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
+    }.body()
 
     suspend fun searchTextQuery(
         mediaType: TraktMediaType,
         searchQuery: TraktSearchQuery,
-    ): List<TraktSearchResult> =
-        client
-            .get {
-                endPointSearch(mediaType.value)
-                parameters(searchQuery.parameters)
-            }.body()
+    ): List<TraktSearchResult> = client.get {
+        endPointSearch(mediaType.value)
+        parameters(searchQuery.parameters)
+    }.body()
 
     suspend fun searchTextQueryMovie(searchQuery: TraktSearchQuery) = searchTextQuery(TraktMediaType.MOVIE, searchQuery)
 

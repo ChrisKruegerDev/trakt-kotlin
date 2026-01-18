@@ -1,0 +1,16 @@
+[
+  {
+    "hidden_at": "2024-01-15T10:00:00.000Z",
+    "type": "movie",
+    "movie": {
+      "title": "Some Movie",
+      "year": 2023,
+      "ids": {
+        "trakt": 123456,
+        "slug": "some-movie-2023",
+        "imdb": "tt1234567",
+        "tmdb": 654321
+      }
+    }
+  }
+]

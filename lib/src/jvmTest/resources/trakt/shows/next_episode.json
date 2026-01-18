@@ -1,0 +1,11 @@
+{
+  "season": 5,
+  "number": 3,
+  "title": "Mother",
+  "ids": {
+    "trakt": 123459,
+    "tvdb": 654324,
+    "imdb": "tt1234570",
+    "tmdb": 111225
+  }
+}

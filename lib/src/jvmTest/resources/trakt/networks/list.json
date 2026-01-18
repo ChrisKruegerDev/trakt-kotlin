@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Netflix",
+    "ids": {
+      "trakt": 1,
+      "slug": "netflix",
+      "tmdb": 213
+    }
+  },
+  {
+    "name": "HBO",
+    "ids": {
+      "trakt": 2,
+      "slug": "hbo",
+      "tmdb": 49
+    }
+  },
+  {
+    "name": "Amazon",
+    "ids": {
+      "trakt": 3,
+      "slug": "amazon",
+      "tmdb": 1024
+    }
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "us": [
+    {
+      "name": "G",
+      "slug": "g",
+      "description": "General audiences. All ages admitted."
+    },
+    {
+      "name": "PG",
+      "slug": "pg",
+      "description": "Parental guidance suggested. Some material may not be suitable for children."
+    },
+    {
+      "name": "PG-13",
+      "slug": "pg-13",
+      "description": "Parents strongly cautioned. Some material may be inappropriate for children under 13."
+    },
+    {
+      "name": "R",
+      "slug": "r",
+      "description": "Restricted. Under 17 requires accompanying parent or adult guardian."
+    },
+    {
+      "name": "NC-17",
+      "slug": "nc-17",
+      "description": "Adults only. No one 17 and under admitted."
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 package app.moviebase.trakt.model
 
+import kotlin.time.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -8,6 +9,20 @@ object TraktListCategory {
     const val ANTICIPATED = "anticipated"
     const val BOX_OFFICE = "boxoffice"
 }
+
+@Serializable
+data class TraktTrendingList(
+    @SerialName("like_count") val likeCount: Int = 0,
+    @SerialName("comment_count") val commentCount: Int = 0,
+    @SerialName("list") val list: TraktList? = null,
+)
+
+@Serializable
+data class TraktPopularList(
+    @SerialName("like_count") val likeCount: Int = 0,
+    @SerialName("comment_count") val commentCount: Int = 0,
+    @SerialName("list") val list: TraktList? = null,
+)
 
 @Serializable
 enum class TraktListMediaType(

@@ -94,3 +94,107 @@ data class TraktSyncErrors(
 ) {
     val isEmpty: Boolean get() = listOf(movies, shows, seasons, episodes, people, ids).all { it.isEmpty() }
 }
+
+@Serializable
+data class TraktLastActivities(
+    @SerialName("all") val all: Instant,
+    @SerialName("movies") val movies: TraktMovieActivities? = null,
+    @SerialName("episodes") val episodes: TraktEpisodeActivities? = null,
+    @SerialName("shows") val shows: TraktShowActivities? = null,
+    @SerialName("seasons") val seasons: TraktSeasonActivities? = null,
+    @SerialName("comments") val comments: TraktCommentActivities? = null,
+    @SerialName("lists") val lists: TraktListActivities? = null,
+    @SerialName("watchlist") val watchlist: TraktWatchlistActivities? = null,
+    @SerialName("favorites") val favorites: TraktFavoritesActivities? = null,
+    @SerialName("account") val account: TraktAccountActivities? = null,
+    @SerialName("saved_filters") val savedFilters: TraktSavedFiltersActivities? = null,
+)
+
+@Serializable
+data class TraktMovieActivities(
+    @SerialName("watched_at") val watchedAt: Instant? = null,
+    @SerialName("collected_at") val collectedAt: Instant? = null,
+    @SerialName("rated_at") val ratedAt: Instant? = null,
+    @SerialName("watchlisted_at") val watchlistedAt: Instant? = null,
+    @SerialName("favorited_at") val favoritedAt: Instant? = null,
+    @SerialName("recommendations_at") val recommendationsAt: Instant? = null,
+    @SerialName("commented_at") val commentedAt: Instant? = null,
+    @SerialName("paused_at") val pausedAt: Instant? = null,
+    @SerialName("hidden_at") val hiddenAt: Instant? = null,
+)
+
+@Serializable
+data class TraktEpisodeActivities(
+    @SerialName("watched_at") val watchedAt: Instant? = null,
+    @SerialName("collected_at") val collectedAt: Instant? = null,
+    @SerialName("rated_at") val ratedAt: Instant? = null,
+    @SerialName("watchlisted_at") val watchlistedAt: Instant? = null,
+    @SerialName("commented_at") val commentedAt: Instant? = null,
+    @SerialName("paused_at") val pausedAt: Instant? = null,
+)
+
+@Serializable
+data class TraktShowActivities(
+    @SerialName("rated_at") val ratedAt: Instant? = null,
+    @SerialName("watchlisted_at") val watchlistedAt: Instant? = null,
+    @SerialName("favorited_at") val favoritedAt: Instant? = null,
+    @SerialName("recommendations_at") val recommendationsAt: Instant? = null,
+    @SerialName("commented_at") val commentedAt: Instant? = null,
+    @SerialName("hidden_at") val hiddenAt: Instant? = null,
+)
+
+@Serializable
+data class TraktSeasonActivities(
+    @SerialName("rated_at") val ratedAt: Instant? = null,
+    @SerialName("watchlisted_at") val watchlistedAt: Instant? = null,
+    @SerialName("commented_at") val commentedAt: Instant? = null,
+    @SerialName("hidden_at") val hiddenAt: Instant? = null,
+)
+
+@Serializable
+data class TraktCommentActivities(
+    @SerialName("liked_at") val likedAt: Instant? = null,
+    @SerialName("blocked_at") val blockedAt: Instant? = null,
+)
+
+@Serializable
+data class TraktListActivities(
+    @SerialName("liked_at") val likedAt: Instant? = null,
+    @SerialName("updated_at") val updatedAt: Instant? = null,
+    @SerialName("commented_at") val commentedAt: Instant? = null,
+)
+
+@Serializable
+data class TraktWatchlistActivities(
+    @SerialName("updated_at") val updatedAt: Instant? = null,
+)
+
+@Serializable
+data class TraktFavoritesActivities(
+    @SerialName("updated_at") val updatedAt: Instant? = null,
+)
+
+@Serializable
+data class TraktAccountActivities(
+    @SerialName("settings_at") val settingsAt: Instant? = null,
+    @SerialName("followed_at") val followedAt: Instant? = null,
+    @SerialName("following_at") val followingAt: Instant? = null,
+    @SerialName("pending_at") val pendingAt: Instant? = null,
+    @SerialName("requested_at") val requestedAt: Instant? = null,
+)
+
+@Serializable
+data class TraktSavedFiltersActivities(
+    @SerialName("updated_at") val updatedAt: Instant? = null,
+)
+
+@Serializable
+data class TraktPlaybackItem(
+    @SerialName("id") val id: Int,
+    @SerialName("progress") val progress: Float,
+    @SerialName("paused_at") val pausedAt: Instant,
+    @SerialName("type") val type: TraktMediaType,
+    @SerialName("movie") val movie: TraktMovie? = null,
+    @SerialName("episode") val episode: TraktEpisode? = null,
+    @SerialName("show") val show: TraktShow? = null,
+)

@@ -1,0 +1,18 @@
+{
+  "id": 12345,
+  "action": "pause",
+  "progress": 50.0,
+  "sharing": {
+    "facebook": false,
+    "twitter": false,
+    "tumblr": false
+  },
+  "movie": {
+    "ids": {
+      "trakt": 546896,
+      "slug": "dune-part-two-2024",
+      "imdb": "tt15239678",
+      "tmdb": 693134
+    }
+  }
+}

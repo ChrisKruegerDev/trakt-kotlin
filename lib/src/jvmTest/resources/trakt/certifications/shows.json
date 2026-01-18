@@ -1,0 +1,34 @@
+{
+  "us": [
+    {
+      "name": "TV-Y",
+      "slug": "tv-y",
+      "description": "All Children. This program is designed to be appropriate for all children."
+    },
+    {
+      "name": "TV-Y7",
+      "slug": "tv-y7",
+      "description": "Directed to Older Children. This program is designed for children age 7 and above."
+    },
+    {
+      "name": "TV-G",
+      "slug": "tv-g",
+      "description": "General Audience. Most parents would find this program suitable for all ages."
+    },
+    {
+      "name": "TV-PG",
+      "slug": "tv-pg",
+      "description": "Parental Guidance Suggested. This program contains material that parents may find unsuitable for younger children."
+    },
+    {
+      "name": "TV-14",
+      "slug": "tv-14",
+      "description": "Parents Strongly Cautioned. This program contains some material that many parents would find unsuitable for children under 14 years of age."
+    },
+    {
+      "name": "TV-MA",
+      "slug": "tv-ma",
+      "description": "Mature Audience Only. This program is specifically designed to be viewed by adults and therefore may be unsuitable for children under 17."
+    }
+  ]
+}

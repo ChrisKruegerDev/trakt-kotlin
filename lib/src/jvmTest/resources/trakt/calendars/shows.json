@@ -1,0 +1,52 @@
+[
+  {
+    "first_aired": "2024-01-15T03:00:00.000Z",
+    "episode": {
+      "season": 5,
+      "number": 1,
+      "title": "The Beginning",
+      "ids": {
+        "trakt": 123456,
+        "tvdb": 654321,
+        "imdb": "tt1234567",
+        "tmdb": 111222
+      }
+    },
+    "show": {
+      "title": "The Expanse",
+      "year": 2015,
+      "ids": {
+        "trakt": 77199,
+        "slug": "the-expanse",
+        "tvdb": 280619,
+        "imdb": "tt3230854",
+        "tmdb": 63639
+      }
+    }
+  },
+  {
+    "first_aired": "2024-01-16T04:00:00.000Z",
+    "episode": {
+      "season": 3,
+      "number": 5,
+      "title": "Middle Ground",
+      "ids": {
+        "trakt": 789012,
+        "tvdb": 210987,
+        "imdb": "tt7654321",
+        "tmdb": 333444
+      }
+    },
+    "show": {
+      "title": "Vikings",
+      "year": 2013,
+      "ids": {
+        "trakt": 52545,
+        "slug": "vikings",
+        "tvdb": 260449,
+        "imdb": "tt2306299",
+        "tmdb": 44217
+      }
+    }
+  }
+]

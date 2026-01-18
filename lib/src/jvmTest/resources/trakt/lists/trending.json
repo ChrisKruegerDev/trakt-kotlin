@@ -1,0 +1,26 @@
+[
+  {
+    "like_count": 125,
+    "comment_count": 15,
+    "list": {
+      "name": "Best Sci-Fi Movies",
+      "ids": {
+        "trakt": 1001,
+        "slug": "best-sci-fi-movies"
+      },
+      "privacy": "public"
+    }
+  },
+  {
+    "like_count": 98,
+    "comment_count": 8,
+    "list": {
+      "name": "Must Watch TV Shows 2024",
+      "ids": {
+        "trakt": 1002,
+        "slug": "must-watch-tv-shows-2024"
+      },
+      "privacy": "public"
+    }
+  }
+]

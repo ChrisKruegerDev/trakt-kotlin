@@ -1,0 +1,44 @@
+{
+  "cast": [
+    {
+      "character": "James Holden",
+      "characters": ["James Holden"],
+      "person": {
+        "name": "Steven Strait",
+        "ids": {
+          "trakt": 456789,
+          "slug": "steven-strait",
+          "imdb": "nm1696069",
+          "tmdb": 83155
+        }
+      }
+    }
+  ],
+  "crew": {
+    "directing": [],
+    "writing": [],
+    "production": [
+      {
+        "job": "Executive Producer",
+        "jobs": ["Executive Producer"],
+        "person": {
+          "name": "Naren Shankar",
+          "ids": {
+            "trakt": 567890,
+            "slug": "naren-shankar",
+            "imdb": "nm0787873",
+            "tmdb": 35323
+          }
+        }
+      }
+    ],
+    "art": [],
+    "crew": [],
+    "costume & make-up": [],
+    "sound": [],
+    "camera": [],
+    "visual effects": [],
+    "lighting": [],
+    "editing": []
+  }
+}

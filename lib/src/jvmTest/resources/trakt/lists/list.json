@@ -1,0 +1,8 @@
+{
+  "name": "Best Sci-Fi Movies",
+  "ids": {
+    "trakt": 1001,
+    "slug": "best-sci-fi-movies"
+  },
+  "privacy": "public"
+}

@@ -1,0 +1,32 @@
+{
+  "id": 67890,
+  "action": "scrobble",
+  "progress": 95.0,
+  "sharing": {
+    "facebook": false,
+    "twitter": false,
+    "tumblr": false
+  },
+  "episode": {
+    "season": 4,
+    "number": 1,
+    "title": "New Terra",
+    "ids": {
+      "trakt": 123456,
+      "tvdb": 654321,
+      "imdb": "tt1234567",
+      "tmdb": 111222
+    }
+  },
+  "show": {
+    "title": "The Expanse",
+    "year": 2015,
+    "ids": {
+      "trakt": 77199,
+      "slug": "the-expanse",
+      "tvdb": 280619,
+      "imdb": "tt3230854",
+      "tmdb": 63639
+    }
+  }
+}

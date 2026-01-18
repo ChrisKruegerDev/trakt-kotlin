@@ -1,0 +1,28 @@
+[
+  {
+    "revenue": 150000000,
+    "movie": {
+      "title": "Dune: Part Two",
+      "year": 2024,
+      "ids": {
+        "trakt": 546896,
+        "slug": "dune-part-two-2024",
+        "imdb": "tt15239678",
+        "tmdb": 693134
+      }
+    }
+  },
+  {
+    "revenue": 95000000,
+    "movie": {
+      "title": "Oppenheimer",
+      "year": 2023,
+      "ids": {
+        "trakt": 496243,
+        "slug": "oppenheimer-2023",
+        "imdb": "tt15398776",
+        "tmdb": 872585
+      }
+    }
+  }
+]

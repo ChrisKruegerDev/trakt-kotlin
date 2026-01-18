@@ -1,0 +1,26 @@
+[
+  {
+    "like_count": 500,
+    "comment_count": 50,
+    "list": {
+      "name": "Marvel Cinematic Universe",
+      "ids": {
+        "trakt": 2001,
+        "slug": "marvel-cinematic-universe"
+      },
+      "privacy": "public"
+    }
+  },
+  {
+    "like_count": 450,
+    "comment_count": 42,
+    "list": {
+      "name": "Oscar Winners",
+      "ids": {
+        "trakt": 2002,
+        "slug": "oscar-winners"
+      },
+      "privacy": "public"
+    }
+  }
+]
