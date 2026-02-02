@@ -68,9 +68,13 @@ class TraktUsersApi(
     suspend fun getListItems(
         userSlug: TraktUserSlug = TraktUserSlug.ME,
         listId: String,
+        page: Int = 1,
+        limit: Int = 10,
         extended: TraktExtended? = null,
     ): List<TraktUserListItem> = client.get {
         endPointLists(userSlug, listId)
+        parameterPage(page)
+        parameterLimit(limit)
         extended?.let { parameterExtended(it) }
     }.body()
 
@@ -165,17 +169,25 @@ class TraktUsersApi(
 
     suspend fun getCollectionMovies(
         userSlug: TraktUserSlug,
+        page: Int = 1,
+        limit: Int = 10,
         extended: TraktExtended? = null,
     ): List<TraktHistoryItem> = client.get {
         endPointUsers(userSlug, "collection", "movies")
+        parameterPage(page)
+        parameterLimit(limit)
         extended?.let { parameterExtended(it) }
     }.body()
 
     suspend fun getCollectionShows(
         userSlug: TraktUserSlug,
+        page: Int = 1,
+        limit: Int = 10,
         extended: TraktExtended? = null,
     ): List<TraktHistoryItem> = client.get {
         endPointUsers(userSlug, "collection", "shows")
+        parameterPage(page)
+        parameterLimit(limit)
         extended?.let { parameterExtended(it) }
     }.body()
 

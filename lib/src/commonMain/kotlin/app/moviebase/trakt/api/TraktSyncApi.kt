@@ -156,16 +156,24 @@ class TraktSyncApi(
 
     suspend fun getCollectionMovies(
         extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
     ): List<TraktCollectionItem> = client.get {
         endPointSync("collection", "movies")
         extended?.let { parameterExtended(it) }
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
     }.body()
 
     suspend fun getCollectionShows(
         extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
     ): List<TraktCollectionItem> = client.get {
         endPointSync("collection", "shows")
         extended?.let { parameterExtended(it) }
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
     }.body()
 
     suspend fun getFavoriteMovies(
