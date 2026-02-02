@@ -1,0 +1,19 @@
+[
+  {
+    "rank": 1,
+    "id": 11111111,
+    "listed_at": "2024-01-05T18:00:00.000Z",
+    "notes": "All-time favorite",
+    "type": "movie",
+    "movie": {
+      "title": "The Shawshank Redemption",
+      "year": 1994,
+      "ids": {
+        "trakt": 278,
+        "slug": "the-shawshank-redemption-1994",
+        "imdb": "tt0111161",
+        "tmdb": 278
+      }
+    }
+  }
+]

@@ -14,7 +14,7 @@ data class TraktSyncItems(
 )
 
 sealed interface TraktSyncItem {
-    val ids: TraktItemIds
+    val ids: TraktItemIds?
     val rating: Int?
     val watchedAt: Instant?
     val collectedAt: Instant?
@@ -42,7 +42,8 @@ data class TraktSyncShow(
 
 @Serializable
 data class TraktSyncSeason(
-    @SerialName("ids") override val ids: TraktItemIds,
+    @SerialName("ids") override val ids: TraktItemIds? = null,
+    @SerialName("number") val number: Int? = null,
     @SerialName("rating") override val rating: Int? = null,
     @SerialName("watched_at") override val watchedAt: Instant? = null,
     @SerialName("collected_at") override val collectedAt: Instant? = null,
@@ -52,7 +53,8 @@ data class TraktSyncSeason(
 
 @Serializable
 data class TraktSyncEpisode(
-    @SerialName("ids") val ids: TraktItemIds,
+    @SerialName("ids") val ids: TraktItemIds? = null,
+    @SerialName("number") val number: Int? = null,
     @SerialName("rating") val rating: Int? = null,
     @SerialName("watched_at") val watchedAt: Instant? = null,
     @SerialName("collected_at") val collectedAt: Instant? = null,

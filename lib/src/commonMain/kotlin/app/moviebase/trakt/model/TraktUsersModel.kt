@@ -92,14 +92,38 @@ data class TraktHistoryItem(
     @SerialName("episode") val episode: TraktEpisode? = null,
 )
 
+/**
+ * Item types for user list items. Includes person in addition to media types.
+ */
+@Serializable
+enum class TraktListItemType(
+    val value: String,
+) {
+    @SerialName("movie")
+    MOVIE("movie"),
+
+    @SerialName("show")
+    SHOW("show"),
+
+    @SerialName("season")
+    SEASON("season"),
+
+    @SerialName("episode")
+    EPISODE("episode"),
+
+    @SerialName("person")
+    PERSON("person"),
+}
+
 @Serializable
 data class TraktUserListItem(
     @SerialName("id") val id: Long,
     @SerialName("rank") val rank: Int,
     @SerialName("listed_at") val listedAt: Instant,
-    @SerialName("type") val type: String,
+    @SerialName("type") val type: TraktListItemType,
     @SerialName("movie") val movie: TraktMovie? = null,
     @SerialName("show") val show: TraktShow? = null,
+    @SerialName("season") val season: TraktSeason? = null,
     @SerialName("episode") val episode: TraktEpisode? = null,
     @SerialName("person") val person: TraktPerson? = null,
 )
@@ -141,18 +165,55 @@ sealed interface TraktMediaItem {
 }
 
 /**
- * Response item from sync/watched/movies and sync/watched/shows endpoints.
+ * Response item from sync/watched/movies endpoint.
  */
 @Serializable
-data class TraktWatchedItem(
+data class TraktWatchedMovie(
     @SerialName("plays") val plays: Int = 0,
     @SerialName("last_watched_at") val lastWatchedAt: Instant? = null,
     @SerialName("last_updated_at") val lastUpdatedAt: Instant? = null,
     @SerialName("reset_at") val resetAt: Instant? = null,
     @SerialName("movie") override val movie: TraktMovie? = null,
+) : TraktMediaItem {
+    override val show: TraktShow? get() = null
+}
+
+/**
+ * Response item from sync/watched/shows endpoint.
+ * Contains only the fields returned by the API: plays, timestamps, show, and watched seasons/episodes.
+ */
+@Serializable
+data class TraktWatchedShow(
+    @SerialName("plays") val plays: Int = 0,
+    @SerialName("last_watched_at") val lastWatchedAt: Instant? = null,
+    @SerialName("last_updated_at") val lastUpdatedAt: Instant? = null,
+    @SerialName("reset_at") val resetAt: Instant? = null,
     @SerialName("show") override val show: TraktShow? = null,
-    @SerialName("seasons") val seasons: List<TraktSeason> = emptyList(),
-) : TraktMediaItem
+    @SerialName("seasons") val seasons: List<TraktWatchedSeason> = emptyList(),
+) : TraktMediaItem {
+    override val movie: TraktMovie? get() = null
+}
+
+/**
+ * Season data from sync/watched/shows endpoint.
+ * Contains only the season number and list of watched episodes.
+ */
+@Serializable
+data class TraktWatchedSeason(
+    @SerialName("number") val number: Int,
+    @SerialName("episodes") val episodes: List<TraktWatchedEpisode> = emptyList(),
+)
+
+/**
+ * Episode data from sync/watched/shows endpoint.
+ * Contains the episode number, play count, and last watched timestamp.
+ */
+@Serializable
+data class TraktWatchedEpisode(
+    @SerialName("number") val number: Int,
+    @SerialName("plays") val plays: Int = 0,
+    @SerialName("last_watched_at") val lastWatchedAt: Instant? = null,
+)
 
 /**
  * Response item from sync/collection/movies and sync/collection/shows endpoints.
@@ -196,6 +257,32 @@ data class TraktRatedItem(
     @SerialName("season") val season: TraktSeason? = null,
     @SerialName("episode") val episode: TraktEpisode? = null,
 ) : TraktMediaItem
+
+/**
+ * Hidden section types for users/hidden/{section} endpoint.
+ */
+@Serializable
+enum class TraktHiddenSection(
+    val value: String,
+) {
+    @SerialName("calendar")
+    CALENDAR("calendar"),
+
+    @SerialName("progress_watched")
+    PROGRESS_WATCHED("progress_watched"),
+
+    @SerialName("progress_watched_reset")
+    PROGRESS_WATCHED_RESET("progress_watched_reset"),
+
+    @SerialName("progress_collected")
+    PROGRESS_COLLECTED("progress_collected"),
+
+    @SerialName("recommendations")
+    RECOMMENDATIONS("recommendations"),
+
+    @SerialName("comments")
+    COMMENTS("comments"),
+}
 
 /**
  * Response item from users/hidden endpoints.

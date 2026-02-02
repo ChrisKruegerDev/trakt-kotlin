@@ -1,0 +1,19 @@
+[
+  {
+    "rank": 1,
+    "id": 87654321,
+    "listed_at": "2024-01-25T09:00:00.000Z",
+    "notes": null,
+    "type": "show",
+    "show": {
+      "title": "The Last of Us",
+      "year": 2023,
+      "ids": {
+        "trakt": 158947,
+        "slug": "the-last-of-us",
+        "imdb": "tt3581920",
+        "tmdb": 100088
+      }
+    }
+  }
+]

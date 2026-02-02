@@ -10,11 +10,14 @@ import app.moviebase.trakt.model.TraktFavoriteItem
 import app.moviebase.trakt.model.TraktLastActivities
 import app.moviebase.trakt.model.TraktMediaType
 import app.moviebase.trakt.model.TraktRatedItem
-import app.moviebase.trakt.model.TraktWatchedItem
+import app.moviebase.trakt.model.TraktWatchedMovie
+import app.moviebase.trakt.model.TraktWatchedShow
 import app.moviebase.trakt.model.TraktWatchlistItem
+import app.moviebase.trakt.model.TraktHistoryItem
 import app.moviebase.trakt.model.TraktPlaybackItem
 import app.moviebase.trakt.model.TraktSyncItems
 import app.moviebase.trakt.model.TraktSyncResponse
+import kotlin.time.Instant
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -40,6 +43,27 @@ class TraktSyncApi(
         endPointSync("history", "remove")
         contentType(ContentType.Application.Json)
         setBody(items)
+    }.body()
+
+    suspend fun getHistory(
+        type: TraktMediaType? = null,
+        itemId: Int? = null,
+        startAt: Instant? = null,
+        endAt: Instant? = null,
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): List<TraktHistoryItem> = client.get {
+        when {
+            type != null && itemId != null -> endPointSync("history", type.value, itemId.toString())
+            type != null -> endPointSync("history", type.value)
+            else -> endPointSync("history")
+        }
+        startAt?.let { parameter("start_at", it.toString()) }
+        endAt?.let { parameter("end_at", it.toString()) }
+        extended?.let { parameterExtended(it) }
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
     }.body()
 
     suspend fun addToWatchlist(items: TraktSyncItems): TraktSyncResponse = client.post {
@@ -94,14 +118,14 @@ class TraktSyncApi(
 
     suspend fun getWatchedShows(
         extended: TraktExtended? = null,
-    ): List<TraktWatchedItem> = client.get {
+    ): List<TraktWatchedShow> = client.get {
         endPointSync("watched", "shows")
         extended?.let { parameterExtended(it) }
     }.body()
 
     suspend fun getWatchedMovies(
         extended: TraktExtended? = null,
-    ): List<TraktWatchedItem> = client.get {
+    ): List<TraktWatchedMovie> = client.get {
         endPointSync("watched", "movies")
         extended?.let { parameterExtended(it) }
     }.body()

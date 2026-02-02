@@ -12,6 +12,8 @@ internal object TraktWebConfig {
     const val PAGE_LIMIT_RECOMMENDATION = 20
     const val PAGE_INITIAL = 0
     const val PAGE_MAX_LIMIT = 20
+
+    const val MAX_LIMIT_ITEMS = 1000
 }
 
 internal object TraktHeader {

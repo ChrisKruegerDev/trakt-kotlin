@@ -1,6 +1,7 @@
 package app.moviebase.trakt.api
 
 import app.moviebase.trakt.core.mockHttpClient
+import app.moviebase.trakt.model.TraktListItemType
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -59,7 +60,7 @@ class TraktListsApiTest {
             assertThat(items).isNotEmpty()
             val first = items.first()
             assertThat(first.rank).isEqualTo(1)
-            assertThat(first.type).isEqualTo("movie")
+            assertThat(first.type).isEqualTo(TraktListItemType.MOVIE)
             assertThat(first.movie).isNotNull()
         }
 }

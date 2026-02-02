@@ -1,0 +1,19 @@
+[
+  {
+    "rank": 1,
+    "id": 22222222,
+    "listed_at": "2024-01-08T20:00:00.000Z",
+    "notes": "Best TV show ever",
+    "type": "show",
+    "show": {
+      "title": "The Wire",
+      "year": 2002,
+      "ids": {
+        "trakt": 1418,
+        "slug": "the-wire",
+        "imdb": "tt0306414",
+        "tmdb": 1438
+      }
+    }
+  }
+]
