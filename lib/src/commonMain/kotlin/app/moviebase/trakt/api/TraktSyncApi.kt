@@ -6,6 +6,7 @@ import app.moviebase.trakt.core.parameterExtended
 import app.moviebase.trakt.core.parameterLimit
 import app.moviebase.trakt.core.parameterPage
 import app.moviebase.trakt.model.TraktCollectionItem
+import app.moviebase.trakt.model.TraktFavoriteItem
 import app.moviebase.trakt.model.TraktLastActivities
 import app.moviebase.trakt.model.TraktMediaType
 import app.moviebase.trakt.model.TraktRatedItem
@@ -73,6 +74,18 @@ class TraktSyncApi(
 
     suspend fun removeRatings(items: TraktSyncItems): TraktSyncResponse = client.post {
         endPointSync("ratings", "remove")
+        contentType(ContentType.Application.Json)
+        setBody(items)
+    }.body()
+
+    suspend fun addToFavorites(items: TraktSyncItems): TraktSyncResponse = client.post {
+        endPointSync("favorites")
+        contentType(ContentType.Application.Json)
+        setBody(items)
+    }.body()
+
+    suspend fun removeFromFavorites(items: TraktSyncItems): TraktSyncResponse = client.post {
+        endPointSync("favorites", "remove")
         contentType(ContentType.Application.Json)
         setBody(items)
     }.body()
@@ -153,6 +166,28 @@ class TraktSyncApi(
     ): List<TraktCollectionItem> = client.get {
         endPointSync("collection", "shows")
         extended?.let { parameterExtended(it) }
+    }.body()
+
+    suspend fun getFavoriteMovies(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): List<TraktFavoriteItem> = client.get {
+        endPointSync("favorites", "movies")
+        extended?.let { parameterExtended(it) }
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
+    }.body()
+
+    suspend fun getFavoriteShows(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): List<TraktFavoriteItem> = client.get {
+        endPointSync("favorites", "shows")
+        extended?.let { parameterExtended(it) }
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
     }.body()
 
     // Ratings endpoints
