@@ -13,8 +13,7 @@ import app.moviebase.trakt.model.TraktFollowRequest
 import app.moviebase.trakt.model.TraktFollowResponse
 import app.moviebase.trakt.model.TraktHistoryItem
 import app.moviebase.trakt.model.TraktFavoriteItem
-import app.moviebase.trakt.model.TraktWatchedMovie
-import app.moviebase.trakt.model.TraktWatchedShow
+import app.moviebase.trakt.model.TraktWatchedItem
 import app.moviebase.trakt.model.TraktHiddenItem
 import app.moviebase.trakt.model.TraktHiddenSection
 import app.moviebase.trakt.model.TraktLike
@@ -158,7 +157,7 @@ class TraktUsersApi(
     suspend fun getWatchedMovies(
         userSlug: TraktUserSlug,
         extended: TraktExtended? = null,
-    ): List<TraktWatchedMovie> = client.get {
+    ): List<TraktWatchedItem> = client.get {
         endPointUsers(userSlug, "watched", "movies")
         extended?.let { parameterExtended(it) }
     }.body()
@@ -166,7 +165,7 @@ class TraktUsersApi(
     suspend fun getWatchedShows(
         userSlug: TraktUserSlug,
         extended: TraktExtended? = null,
-    ): List<TraktWatchedShow> = client.get {
+    ): List<TraktWatchedItem> = client.get {
         endPointUsers(userSlug, "watched", "shows")
         extended?.let { parameterExtended(it) }
     }.body()

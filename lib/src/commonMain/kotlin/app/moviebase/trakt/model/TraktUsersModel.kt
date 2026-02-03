@@ -165,34 +165,18 @@ sealed interface TraktMediaItem {
 }
 
 /**
- * Response item from sync/watched/movies endpoint.
+ * Response item from sync/watched/movies and sync/watched/shows endpoints.
  */
 @Serializable
-data class TraktWatchedMovie(
+data class TraktWatchedItem(
     @SerialName("plays") val plays: Int = 0,
     @SerialName("last_watched_at") val lastWatchedAt: Instant? = null,
     @SerialName("last_updated_at") val lastUpdatedAt: Instant? = null,
     @SerialName("reset_at") val resetAt: Instant? = null,
     @SerialName("movie") override val movie: TraktMovie? = null,
-) : TraktMediaItem {
-    override val show: TraktShow? get() = null
-}
-
-/**
- * Response item from sync/watched/shows endpoint.
- * Contains only the fields returned by the API: plays, timestamps, show, and watched seasons/episodes.
- */
-@Serializable
-data class TraktWatchedShow(
-    @SerialName("plays") val plays: Int = 0,
-    @SerialName("last_watched_at") val lastWatchedAt: Instant? = null,
-    @SerialName("last_updated_at") val lastUpdatedAt: Instant? = null,
-    @SerialName("reset_at") val resetAt: Instant? = null,
     @SerialName("show") override val show: TraktShow? = null,
     @SerialName("seasons") val seasons: List<TraktWatchedSeason> = emptyList(),
-) : TraktMediaItem {
-    override val movie: TraktMovie? get() = null
-}
+) : TraktMediaItem
 
 /**
  * Season data from sync/watched/shows endpoint.

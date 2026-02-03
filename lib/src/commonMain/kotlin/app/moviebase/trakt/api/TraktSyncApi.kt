@@ -10,8 +10,7 @@ import app.moviebase.trakt.model.TraktFavoriteItem
 import app.moviebase.trakt.model.TraktLastActivities
 import app.moviebase.trakt.model.TraktMediaType
 import app.moviebase.trakt.model.TraktRatedItem
-import app.moviebase.trakt.model.TraktWatchedMovie
-import app.moviebase.trakt.model.TraktWatchedShow
+import app.moviebase.trakt.model.TraktWatchedItem
 import app.moviebase.trakt.model.TraktWatchlistItem
 import app.moviebase.trakt.model.TraktHistoryItem
 import app.moviebase.trakt.model.TraktPlaybackItem
@@ -118,14 +117,14 @@ class TraktSyncApi(
 
     suspend fun getWatchedShows(
         extended: TraktExtended? = null,
-    ): List<TraktWatchedShow> = client.get {
+    ): List<TraktWatchedItem> = client.get {
         endPointSync("watched", "shows")
         extended?.let { parameterExtended(it) }
     }.body()
 
     suspend fun getWatchedMovies(
         extended: TraktExtended? = null,
-    ): List<TraktWatchedMovie> = client.get {
+    ): List<TraktWatchedItem> = client.get {
         endPointSync("watched", "movies")
         extended?.let { parameterExtended(it) }
     }.body()
