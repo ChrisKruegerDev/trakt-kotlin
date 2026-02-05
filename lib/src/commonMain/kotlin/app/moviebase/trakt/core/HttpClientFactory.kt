@@ -17,7 +17,9 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.utils.unwrapCancellationException
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 
 internal object HttpClientFactory {
@@ -30,6 +32,7 @@ internal object HttpClientFactory {
                     protocol = URLProtocol.HTTPS
                     host = TraktWebConfig.HOST
                 }
+                contentType(ContentType.Application.Json)
             }
 
             install(ContentNegotiation) {
