@@ -40,14 +40,14 @@ class Trakt internal constructor(
     val client: HttpClient by lazy {
         HttpClientFactory.create(config).apply {
             interceptRequest {
-                it.header(TraktHeader.API_KEY, config.traktApiKey)
+                it.header(TraktHeader.API_KEY, config.clientId)
                 it.header(TraktHeader.API_VERSION, TraktWebConfig.VERSION)
             }
         }
     }
 
     init {
-        requireNotNull(config.traktApiKey) {
+        requireNotNull(config.clientId) {
             "Trakt API key unavailable. Set the traktApiKey field in the class TraktClientConfig when instantiate the Trakt client."
         }
     }

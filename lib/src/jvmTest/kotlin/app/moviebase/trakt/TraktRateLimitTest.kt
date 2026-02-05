@@ -13,7 +13,6 @@ import io.ktor.http.headersOf
 import kotlin.system.measureTimeMillis
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
 import org.junit.jupiter.api.Test
 
 class TraktRateLimitTest {
@@ -60,7 +59,7 @@ class TraktRateLimitTest {
         retryAfterSeconds: Int = 1,
     ): TraktClientConfig.() -> Unit =
         {
-            traktApiKey = "someKey"
+            clientId = "someKey"
             useCache = true
             useTimeout = true
 

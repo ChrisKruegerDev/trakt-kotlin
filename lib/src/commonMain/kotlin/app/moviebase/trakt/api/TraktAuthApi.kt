@@ -34,7 +34,7 @@ class TraktAuthApi(
     ): TraktAccessToken {
         val requestToken =
             TraktTokenRefreshRequest(
-                clientId = config.traktApiKey,
+                clientId = config.clientId,
                 clientSecret = config.clientSecret,
                 redirectUri = redirectUri,
                 grantType = TraktGrantType.AUTHORIZATION_CODE,
@@ -51,7 +51,7 @@ class TraktAuthApi(
 
         val requestToken =
             TraktTokenRefreshRequest(
-                clientId = config.traktApiKey,
+                clientId = config.clientId,
                 clientSecret = config.clientSecret,
                 redirectUri = redirectUri,
                 grantType = TraktGrantType.REFRESH_TOKEN,
@@ -69,7 +69,7 @@ class TraktAuthApi(
     suspend fun generateDeviceCode(): TraktDeviceCode = client.post {
         endPointOAuth("device", "code")
         contentType(ContentType.Application.Json)
-        setBody(TraktDeviceCodeRequest(clientId = config.traktApiKey!!))
+        setBody(TraktDeviceCodeRequest(clientId = config.clientId!!))
     }.body()
 
     /**
@@ -94,7 +94,7 @@ class TraktAuthApi(
         setBody(
             TraktDeviceTokenRequest(
                 code = deviceCode,
-                clientId = config.traktApiKey!!,
+                clientId = config.clientId!!,
                 clientSecret = config.clientSecret,
             ),
         )
@@ -114,7 +114,7 @@ class TraktAuthApi(
             setBody(
                 TraktTokenRevokeRequest(
                     token = token,
-                    clientId = config.traktApiKey,
+                    clientId = config.clientId,
                     clientSecret = config.clientSecret,
                 ),
             )

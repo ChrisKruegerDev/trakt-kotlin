@@ -35,8 +35,8 @@ fun defaultTraktConfiguration(
     authStore: TraktAuthStore? = null,
 ): TraktClientConfig.() -> Unit =
     {
-        this.traktApiKey = traktApiKey ?: properties.getProperty("TRAKT_CLIENT_ID")
-        requireNotNull(this.traktApiKey)
+        this.clientId = traktApiKey ?: properties.getProperty("TRAKT_CLIENT_ID")
+        requireNotNull(this.clientId)
 
         userAuthentication {
             refreshTokens { authStore?.bearerTokens }

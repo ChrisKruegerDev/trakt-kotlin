@@ -45,6 +45,7 @@ import kotlin.time.Instant
 class TraktUsersApi(
     private val client: HttpClient,
 ) {
+
     suspend fun getSettings(): TraktUserSettings = client.get {
         endPoint("users")
     }.body()
@@ -68,6 +69,7 @@ class TraktUsersApi(
 
     suspend fun getLists(userSlug: TraktUserSlug = TraktUserSlug.ME): List<TraktList> = client.get {
         endPointUsers(userSlug, "lists")
+        contentType(ContentType.Application.Json)
     }.body()
 
     suspend fun getListItems(
