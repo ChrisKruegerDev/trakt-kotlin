@@ -9,25 +9,26 @@ import app.moviebase.trakt.core.parameterLimit
 import app.moviebase.trakt.core.parameterPage
 import app.moviebase.trakt.core.parameterStartAt
 import app.moviebase.trakt.model.TraktCollectionItem
+import app.moviebase.trakt.model.TraktFavoriteItem
 import app.moviebase.trakt.model.TraktFollowRequest
 import app.moviebase.trakt.model.TraktFollowResponse
-import app.moviebase.trakt.model.TraktHistoryItem
-import app.moviebase.trakt.model.TraktFavoriteItem
-import app.moviebase.trakt.model.TraktWatchedItem
 import app.moviebase.trakt.model.TraktHiddenItem
 import app.moviebase.trakt.model.TraktHiddenSection
+import app.moviebase.trakt.model.TraktHistoryItem
 import app.moviebase.trakt.model.TraktLike
 import app.moviebase.trakt.model.TraktList
 import app.moviebase.trakt.model.TraktListMediaType
 import app.moviebase.trakt.model.TraktMediaType
 import app.moviebase.trakt.model.TraktRatedItem
-import app.moviebase.trakt.model.TraktWatchlistItem
 import app.moviebase.trakt.model.TraktSyncItems
 import app.moviebase.trakt.model.TraktSyncResponse
 import app.moviebase.trakt.model.TraktUser
 import app.moviebase.trakt.model.TraktUserListItem
 import app.moviebase.trakt.model.TraktUserSettings
 import app.moviebase.trakt.model.TraktUserSlug
+import app.moviebase.trakt.model.TraktWatchedItem
+import app.moviebase.trakt.model.TraktWatching
+import app.moviebase.trakt.model.TraktWatchlistItem
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
@@ -37,6 +38,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import kotlin.time.Instant
 
@@ -150,9 +152,17 @@ class TraktUsersApi(
         endPointUsers(userSlug, "stats")
     }.body()
 
-    suspend fun getWatching(userSlug: TraktUserSlug): TraktHistoryItem = client.get {
-        endPointUsers(userSlug, "watching")
-    }.body()
+    suspend fun getWatching(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        extended: TraktExtended? = null,
+    ): TraktWatching? {
+        val response = client.get {
+            endPointUsers(userSlug, "watching")
+            extended?.let { parameterExtended(it) }
+        }
+        if (response.status == HttpStatusCode.NoContent) return null
+        return response.body()
+    }
 
     suspend fun getWatchedMovies(
         userSlug: TraktUserSlug,

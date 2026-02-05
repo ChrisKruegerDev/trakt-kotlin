@@ -1,0 +1,28 @@
+{
+  "expires_at": "2024-10-23T09:30:00.000Z",
+  "started_at": "2024-10-23T08:30:00.000Z",
+  "action": "watching",
+  "type": "episode",
+  "episode": {
+    "season": 4,
+    "number": 1,
+    "title": "New Station",
+    "ids": {
+      "trakt": 2639411,
+      "tvdb": 7647501,
+      "imdb": "tt10637686",
+      "tmdb": 1982280
+    }
+  },
+  "show": {
+    "title": "The Expanse",
+    "year": 2015,
+    "ids": {
+      "trakt": 77199,
+      "slug": "the-expanse",
+      "tvdb": 280619,
+      "imdb": "tt3230854",
+      "tmdb": 63639
+    }
+  }
+}

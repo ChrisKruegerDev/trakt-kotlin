@@ -4,6 +4,7 @@ import app.moviebase.trakt.core.mockHttpClient
 import app.moviebase.trakt.model.TraktHiddenSection
 import app.moviebase.trakt.model.TraktMediaType
 import app.moviebase.trakt.model.TraktUserSlug
+import app.moviebase.trakt.model.TraktWatching
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -22,6 +23,7 @@ class TraktUsersApiTest {
                     "users/me/watchlist/shows?page=1&limit=10" to "users/watchlist_shows.json",
                     "users/me/favorites/movies?page=1&limit=10" to "users/favorites_movies.json",
                     "users/me/favorites/shows?page=1&limit=10" to "users/favorites_shows.json",
+                    "users/me/watching" to "users/watching_movie.json",
                 ),
         )
 
@@ -160,6 +162,23 @@ class TraktUsersApiTest {
             assertThat(first.movie).isNotNull()
             assertThat(first.movie?.title).isEqualTo("The Shawshank Redemption")
             assertThat(first.movie?.year).isEqualTo(1994)
+        }
+
+    @Test
+    fun `it can fetch watching for current user`() =
+        runTest {
+            val watching = classToTest.getWatching()
+
+            assertThat(watching).isNotNull()
+            assertThat(watching!!.action).isEqualTo("watching")
+            assertThat(watching.type).isEqualTo(TraktMediaType.MOVIE)
+            assertThat(watching.movie).isNotNull()
+            assertThat(watching.movie?.title).isEqualTo("Guardians of the Galaxy")
+            assertThat(watching.movie?.year).isEqualTo(2014)
+            assertThat(watching.movie?.ids?.trakt).isEqualTo(28)
+            assertThat(watching.movie?.ids?.imdb).isEqualTo("tt2015381")
+            assertThat(watching.expiresAt).isNotNull()
+            assertThat(watching.startedAt).isNotNull()
         }
 
     @Test

@@ -93,6 +93,21 @@ data class TraktHistoryItem(
 )
 
 /**
+ * Response from users/{id}/watching endpoint.
+ * Returns what a user is currently watching. If they are not watching anything, the API returns 204 No Content.
+ */
+@Serializable
+data class TraktWatching(
+    @SerialName("expires_at") val expiresAt: Instant? = null,
+    @SerialName("started_at") val startedAt: Instant? = null,
+    @SerialName("action") val action: String? = null,
+    @SerialName("type") val type: TraktMediaType,
+    @SerialName("movie") val movie: TraktMovie? = null,
+    @SerialName("show") val show: TraktShow? = null,
+    @SerialName("episode") val episode: TraktEpisode? = null,
+)
+
+/**
  * Item types for user list items. Includes person in addition to media types.
  */
 @Serializable
