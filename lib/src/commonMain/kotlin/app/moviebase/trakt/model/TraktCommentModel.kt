@@ -4,6 +4,13 @@ import kotlin.time.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+enum class TraktCommentSort(val value: String) {
+    NEWEST("newest"),
+    OLDEST("oldest"),
+    LIKES("likes"),
+    REPLIES("replies"),
+}
+
 @Serializable
 data class TraktPostComment(
     @SerialName("comment") val comment: String,

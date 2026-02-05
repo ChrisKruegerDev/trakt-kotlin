@@ -9,6 +9,7 @@ import app.moviebase.trakt.model.TraktAlias
 import app.moviebase.trakt.model.TraktAnticipatedMovie
 import app.moviebase.trakt.model.TraktBoxOfficeMovie
 import app.moviebase.trakt.model.TraktComment
+import app.moviebase.trakt.model.TraktCommentSort
 import app.moviebase.trakt.model.TraktCredits
 import app.moviebase.trakt.model.TraktList
 import app.moviebase.trakt.model.TraktMovie
@@ -173,11 +174,11 @@ class TraktMoviesApi(
 
     suspend fun getComments(
         movieId: String,
-        sort: String = "newest",
+        sort: TraktCommentSort = TraktCommentSort.NEWEST,
         page: Int = 1,
         limit: Int = 10,
     ): List<TraktComment> = client.get {
-        endPointMovie(movieId, "comments", sort)
+        endPointMovie(movieId, "comments", sort.value)
         parameterPage(page)
         parameterLimit(limit)
     }.body()
