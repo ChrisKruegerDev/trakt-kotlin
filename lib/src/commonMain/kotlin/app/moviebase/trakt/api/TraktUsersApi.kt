@@ -47,7 +47,7 @@ class TraktUsersApi(
 ) {
 
     suspend fun getSettings(): TraktUserSettings = client.get {
-        endPoint("users")
+        endPoint("users", "settings")
     }.body()
 
     suspend fun getProfile(
