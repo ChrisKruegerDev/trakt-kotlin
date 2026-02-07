@@ -110,6 +110,7 @@ data class TraktLastActivities(
     @SerialName("favorites") val favorites: TraktFavoritesActivities? = null,
     @SerialName("account") val account: TraktAccountActivities? = null,
     @SerialName("saved_filters") val savedFilters: TraktSavedFiltersActivities? = null,
+    @SerialName("notes") val notes: TraktNotesActivities? = null,
 )
 
 @Serializable
@@ -187,6 +188,11 @@ data class TraktAccountActivities(
 
 @Serializable
 data class TraktSavedFiltersActivities(
+    @SerialName("updated_at") val updatedAt: Instant? = null,
+)
+
+@Serializable
+data class TraktNotesActivities(
     @SerialName("updated_at") val updatedAt: Instant? = null,
 )
 
