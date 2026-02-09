@@ -50,7 +50,7 @@ data class TraktAccount(
 
 @Serializable
 data class TraktUserStats(
-    @SerialName("rating") val rating: Int,
+    @SerialName("rating") val rating: Int? = null,
 )
 
 @Serializable
