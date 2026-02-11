@@ -7,6 +7,7 @@ internal object JsonFactory {
         Json {
             encodeDefaults = false
             ignoreUnknownKeys = true
+            coerceInputValues = true
             isLenient = true
             allowSpecialFloatingPointValues = true
             prettyPrint = false

@@ -135,7 +135,7 @@ data class TraktUserListItem(
     @SerialName("id") val id: Long,
     @SerialName("rank") val rank: Int,
     @SerialName("listed_at") val listedAt: Instant,
-    @SerialName("type") val type: TraktListItemType,
+    @SerialName("type") val type: TraktListItemType? = null,
     @SerialName("movie") val movie: TraktMovie? = null,
     @SerialName("show") val show: TraktShow? = null,
     @SerialName("season") val season: TraktSeason? = null,
