@@ -9,12 +9,15 @@ import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.statement.bodyAsText
 import io.ktor.client.utils.unwrapCancellationException
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.ContentType
@@ -61,6 +64,15 @@ internal object HttpClientFactory {
 
             // see https://ktor.io/docs/response-validation.html
             expectSuccess = config.expectSuccess
+
+            HttpResponseValidator {
+                validateResponse { response ->
+                    if (response.status.value !in 200..299) {
+                        val bodyText = response.bodyAsText()
+                        throw ResponseException(response, bodyText)
+                    }
+                }
+            }
 
             // see https://ktor.io/docs/client-retry.html
             config.maxRequestRetries?.let {
