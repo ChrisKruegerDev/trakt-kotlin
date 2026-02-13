@@ -10,7 +10,6 @@ import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.HttpResponseValidator
-import io.ktor.client.plugins.ResponseException
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.cache.HttpCache
@@ -69,7 +68,13 @@ internal object HttpClientFactory {
                 validateResponse { response ->
                     if (response.status.value !in 200..299) {
                         val bodyText = response.bodyAsText()
-                        throw ResponseException(response, bodyText)
+                        val errorBody = parseErrorBody(json, bodyText)
+                        throw TraktException(
+                            statusCode = response.status.value,
+                            requestUrl = response.call.request.url.toString(),
+                            body = bodyText,
+                            errorBody = errorBody,
+                        )
                     }
                 }
             }
@@ -88,6 +93,7 @@ internal object HttpClientFactory {
 
                     retryOnExceptionIf(maxRetries = it) { _, cause ->
                         when {
+                            cause is TraktException -> false
                             cause.isTimeoutException() -> false
                             cause is kotlin.coroutines.cancellation.CancellationException -> false
                             else -> true
