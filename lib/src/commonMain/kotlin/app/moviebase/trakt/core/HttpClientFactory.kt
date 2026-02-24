@@ -62,8 +62,8 @@ internal object HttpClientFactory {
                 }
             }
 
-            // see https://ktor.io/docs/response-validation.html
-            expectSuccess = config.expectSuccess
+            // Disable Ktor's built-in validation so all errors go through TraktException
+            expectSuccess = false
 
             HttpResponseValidator {
                 validateResponse { response ->

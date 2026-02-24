@@ -16,7 +16,6 @@ class TraktClientConfig {
 
     internal var traktAuthCredentials: TraktAuthCredentials? = null
 
-    var expectSuccess: Boolean = false
     var useCache: Boolean = true
     var useTimeout: Boolean = true
     var maxRequestRetries: Int? = 5
