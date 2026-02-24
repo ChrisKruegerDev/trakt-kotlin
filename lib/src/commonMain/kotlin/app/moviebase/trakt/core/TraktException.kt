@@ -17,6 +17,16 @@ class TraktException(
     val errorBody: TraktErrorBody? = null,
 ) : RuntimeException(buildMessage(statusCode, requestUrl, errorBody)) {
 
+    val isNotFound: Boolean get() = statusCode == 404
+    val isUnauthorized: Boolean get() = statusCode == 401
+    val isForbidden: Boolean get() = statusCode == 403
+    val isConflict: Boolean get() = statusCode == 409
+    val isRateLimited: Boolean get() = statusCode == 429
+    val isAccountLimitExceeded: Boolean get() = statusCode == 420
+    val isServerError: Boolean get() = statusCode in 500..599
+    val isClientError: Boolean get() = statusCode in 400..499
+    val isRetryable: Boolean get() = isServerError || isRateLimited
+
     companion object {
         private fun buildMessage(statusCode: Int, requestUrl: String, errorBody: TraktErrorBody?): String {
             val detail = errorBody?.errorDescription ?: errorBody?.error

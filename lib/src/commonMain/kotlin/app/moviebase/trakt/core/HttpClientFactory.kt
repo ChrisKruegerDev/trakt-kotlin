@@ -23,6 +23,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.io.IOException
 
 internal object HttpClientFactory {
     fun create(config: TraktClientConfig): HttpClient {
@@ -82,7 +83,6 @@ internal object HttpClientFactory {
             // see https://ktor.io/docs/client-retry.html
             config.maxRequestRetries?.let {
                 install(HttpRequestRetry) {
-                    exponentialDelay()
                     retryIf(it) { _, httpResponse ->
                         when {
                             httpResponse.status.value in 500..599 -> true
@@ -94,11 +94,13 @@ internal object HttpClientFactory {
                     retryOnExceptionIf(maxRetries = it) { _, cause ->
                         when {
                             cause is TraktException -> false
-                            cause.isTimeoutException() -> false
                             cause is kotlin.coroutines.cancellation.CancellationException -> false
-                            else -> true
+                            else -> cause.isRetryableException()
                         }
                     }
+
+                    // Exponential backoff with Retry-After header support, capped at 30s
+                    exponentialDelay(maxDelayMs = 30_000)
                 }
             }
 
@@ -126,10 +128,11 @@ internal object HttpClientFactory {
         return config.httpClientBuilder?.invoke()?.config(defaultConfig) ?: HttpClient(defaultConfig)
     }
 
-    private fun Throwable.isTimeoutException(): Boolean {
+    private fun Throwable.isRetryableException(): Boolean {
         val exception = unwrapCancellationException()
         return exception is HttpRequestTimeoutException ||
             exception is ConnectTimeoutException ||
-            exception is SocketTimeoutException
+            exception is SocketTimeoutException ||
+            exception is IOException
     }
 }
