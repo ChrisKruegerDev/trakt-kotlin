@@ -27,6 +27,7 @@ import app.moviebase.trakt.model.TraktUserListItem
 import app.moviebase.trakt.model.TraktUserSettings
 import app.moviebase.trakt.model.TraktUserSlug
 import app.moviebase.trakt.model.TraktWatchedItem
+import app.moviebase.trakt.model.TraktNote
 import app.moviebase.trakt.model.TraktWatching
 import app.moviebase.trakt.model.TraktWatchlistItem
 import io.ktor.client.HttpClient
@@ -276,6 +277,23 @@ class TraktUsersApi(
         }
         parameterPage(page)
         parameterLimit(limit)
+    }.body()
+
+    suspend fun getUserNotes(
+        userSlug: TraktUserSlug,
+        type: String? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): List<TraktNote> = client.get {
+        val paths = buildList {
+            add("users")
+            add(userSlug.name)
+            add("notes")
+            type?.let { add(it) }
+        }
+        endPoint(*paths.toTypedArray())
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
     }.body()
 
     suspend fun updateList(

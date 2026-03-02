@@ -5,6 +5,7 @@ import app.moviebase.trakt.api.TraktCalendarsApi
 import app.moviebase.trakt.api.TraktCertificationsApi
 import app.moviebase.trakt.api.TraktCheckinApi
 import app.moviebase.trakt.api.TraktCommentsApi
+import app.moviebase.trakt.api.TraktNotesApi
 import app.moviebase.trakt.api.TraktCountriesApi
 import app.moviebase.trakt.api.TraktEpisodesApi
 import app.moviebase.trakt.api.TraktGenresApi
@@ -64,6 +65,7 @@ class Trakt internal constructor(
     val sync by buildApi(::TraktSyncApi)
     val recommendations by buildApi(::TraktRecommendationsApi)
     val comments by buildApi(::TraktCommentsApi)
+    val notes by buildApi(::TraktNotesApi)
 
     // New APIs
     val certifications by buildApi(::TraktCertificationsApi)
