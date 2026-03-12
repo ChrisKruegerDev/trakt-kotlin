@@ -27,6 +27,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode
 
 class TraktShowsApi(
     private val client: HttpClient,
@@ -184,18 +185,26 @@ class TraktShowsApi(
     suspend fun getNextEpisode(
         showId: String,
         extended: TraktExtended? = null,
-    ): TraktEpisode? = client.get {
-        endPointShow(showId, "next_episode")
-        extended?.let { parameterExtended(it) }
-    }.body()
+    ): TraktEpisode? {
+        val response = client.get {
+            endPointShow(showId, "next_episode")
+            extended?.let { parameterExtended(it) }
+        }
+        if (response.status == HttpStatusCode.NoContent) return null
+        return response.body()
+    }
 
     suspend fun getLastEpisode(
         showId: String,
         extended: TraktExtended? = null,
-    ): TraktEpisode? = client.get {
-        endPointShow(showId, "last_episode")
-        extended?.let { parameterExtended(it) }
-    }.body()
+    ): TraktEpisode? {
+        val response = client.get {
+            endPointShow(showId, "last_episode")
+            extended?.let { parameterExtended(it) }
+        }
+        if (response.status == HttpStatusCode.NoContent) return null
+        return response.body()
+    }
 
     suspend fun getLists(
         showId: String,
