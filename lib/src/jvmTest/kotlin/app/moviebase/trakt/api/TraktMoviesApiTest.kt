@@ -17,6 +17,7 @@ class TraktMoviesApiTest {
                     "movies/dune-part-two-2024/translations" to "movies/translations.json",
                     "movies/dune-part-two-2024/people" to "movies/people.json",
                     "movies/dune-part-two-2024/studios" to "movies/studios.json",
+                    "movies/dune-part-two-2024/ratings" to "movies/rating_empty.json",
                 ),
         )
 
@@ -86,6 +87,16 @@ class TraktMoviesApiTest {
             assertThat(firstCast.person.name).isEqualTo("Timothee Chalamet")
 
             assertThat(credits.crew?.directing).isNotEmpty()
+        }
+
+    @Test
+    fun `it can fetch movie rating when api returns empty object`() =
+        runTest {
+            val rating = classToTest.getRating("dune-part-two-2024")
+
+            assertThat(rating.rating).isEqualTo(0.0)
+            assertThat(rating.votes).isEqualTo(0)
+            assertThat(rating.distribution).isNull()
         }
 
     @Test

@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TraktRating(
-    @SerialName("rating") val rating: Double,
-    @SerialName("votes") val votes: Int,
+    @SerialName("rating") val rating: Double = 0.0,
+    @SerialName("votes") val votes: Int = 0,
     @SerialName("distribution") val distribution: TraktRatingDistribution? = null,
 )
 
