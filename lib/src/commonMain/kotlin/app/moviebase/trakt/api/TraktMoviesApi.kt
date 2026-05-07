@@ -15,8 +15,8 @@ import app.moviebase.trakt.model.TraktList
 import app.moviebase.trakt.model.TraktMovie
 import app.moviebase.trakt.model.TraktMovieUpdate
 import app.moviebase.trakt.model.TraktRating
-import app.moviebase.trakt.model.TraktStats
 import app.moviebase.trakt.model.TraktRelease
+import app.moviebase.trakt.model.TraktStats
 import app.moviebase.trakt.model.TraktStudio
 import app.moviebase.trakt.model.TraktTranslation
 import app.moviebase.trakt.model.TraktTrendingMovie
@@ -25,7 +25,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
-import io.ktor.client.request.parameter
+import io.ktor.http.HttpStatusCode
 
 class TraktMoviesApi(
     private val client: HttpClient,
@@ -117,9 +117,13 @@ class TraktMoviesApi(
         extended?.let { parameterExtended(it) }
     }.body()
 
-    suspend fun getRating(traktSlug: String): TraktRating = client.get {
-        endPointMovie(traktSlug, "ratings")
-    }.body()
+    suspend fun getRating(traktSlug: String): TraktRating {
+        val response = client.get {
+            endPointMovie(traktSlug, "ratings")
+        }
+        if (response.status == HttpStatusCode.NoContent) return TraktRating()
+        return response.body()
+    }
 
     suspend fun getStats(traktSlug: String): TraktStats = client.get {
         endPointMovie(traktSlug, "stats")

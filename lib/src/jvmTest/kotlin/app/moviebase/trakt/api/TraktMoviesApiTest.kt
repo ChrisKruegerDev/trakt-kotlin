@@ -1,7 +1,14 @@
 package app.moviebase.trakt.api
 
+import app.moviebase.trakt.core.JsonFactory
 import app.moviebase.trakt.core.mockHttpClient
 import com.google.common.truth.Truth.assertThat
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
@@ -93,6 +100,25 @@ class TraktMoviesApiTest {
     fun `it can fetch movie rating when api returns empty object`() =
         runTest {
             val rating = classToTest.getRating("dune-part-two-2024")
+
+            assertThat(rating.rating).isEqualTo(0.0)
+            assertThat(rating.votes).isEqualTo(0)
+            assertThat(rating.distribution).isNull()
+        }
+
+    @Test
+    fun `it can fetch movie rating when api returns 204 No Content`() =
+        runTest {
+            val noContentClient =
+                HttpClient(MockEngine) {
+                    install(ContentNegotiation) { json(JsonFactory.create()) }
+                    engine {
+                        addHandler { respond(content = "", status = HttpStatusCode.NoContent) }
+                    }
+                }
+            val api = TraktMoviesApi(noContentClient)
+
+            val rating = api.getRating("dune-part-two-2024")
 
             assertThat(rating.rating).isEqualTo(0.0)
             assertThat(rating.votes).isEqualTo(0)

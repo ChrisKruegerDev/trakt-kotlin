@@ -118,9 +118,13 @@ class TraktShowsApi(
         extended?.let { parameterExtended(it) }
     }.body()
 
-    suspend fun getRating(traktSlug: String): TraktRating = client.get {
-        endPointShow(traktSlug, "ratings")
-    }.body()
+    suspend fun getRating(traktSlug: String): TraktRating {
+        val response = client.get {
+            endPointShow(traktSlug, "ratings")
+        }
+        if (response.status == HttpStatusCode.NoContent) return TraktRating()
+        return response.body()
+    }
 
     suspend fun getStats(traktSlug: String): TraktStats = client.get {
         endPointShow(traktSlug, "stats")

@@ -19,6 +19,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
+import io.ktor.http.HttpStatusCode
 
 class TraktSeasonsApi(
     private val client: HttpClient,
@@ -53,9 +54,13 @@ class TraktSeasonsApi(
     suspend fun getRatings(
         showId: String,
         seasonNumber: Int,
-    ): TraktRating = client.get {
-        endPointSeasons(showId, seasonNumber, "ratings")
-    }.body()
+    ): TraktRating {
+        val response = client.get {
+            endPointSeasons(showId, seasonNumber, "ratings")
+        }
+        if (response.status == HttpStatusCode.NoContent) return TraktRating()
+        return response.body()
+    }
 
     /**
      * Returns stats (watchers, plays, collectors, etc.) for a season.
