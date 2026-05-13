@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TraktEpisode(
-    @SerialName("season") val season: Int,
-    @SerialName("number") val number: Int,
+    @SerialName("season") val season: Int? = null,
+    @SerialName("number") val number: Int? = null,
     @SerialName("title") val title: String? = null,
     @SerialName("overview") val overview: String? = null,
     @SerialName("ids") val ids: TraktItemIds? = null,

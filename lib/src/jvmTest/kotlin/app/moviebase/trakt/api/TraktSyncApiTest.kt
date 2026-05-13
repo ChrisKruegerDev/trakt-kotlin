@@ -14,6 +14,7 @@ class TraktSyncApiTest {
                     "sync/last_activities" to "sync/last_activities.json",
                     "sync/playback" to "sync/playback.json",
                     "sync/playback/movie" to "sync/playback.json",
+                    "sync/collection/shows" to "sync/collection_shows.json",
                 ),
         )
 
@@ -50,5 +51,17 @@ class TraktSyncApiTest {
             val playback = classToTest.getPlaybackProgress(type = TraktMediaType.MOVIE)
 
             assertThat(playback).isNotEmpty()
+        }
+
+    @Test
+    fun `it can fetch collection shows when nested episodes omit season field`() =
+        runTest {
+            val collection = classToTest.getCollectionShows()
+
+            assertThat(collection).isNotEmpty()
+            val episodes = collection.first().seasons.first().episodes ?: emptyList()
+            assertThat(episodes).isNotEmpty()
+            assertThat(episodes.first().number).isEqualTo(1)
+            assertThat(episodes.first().season).isNull()
         }
 }
