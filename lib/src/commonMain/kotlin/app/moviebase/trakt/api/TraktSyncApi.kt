@@ -2,6 +2,8 @@ package app.moviebase.trakt.api
 
 import app.moviebase.trakt.TraktExtended
 import app.moviebase.trakt.core.endPoint
+import app.moviebase.trakt.core.TraktPage
+import app.moviebase.trakt.core.bodyPage
 import app.moviebase.trakt.core.parameterExtended
 import app.moviebase.trakt.core.parameterLimit
 import app.moviebase.trakt.core.parameterPage
@@ -64,6 +66,28 @@ class TraktSyncApi(
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
     }.body()
+
+    suspend fun getHistoryPage(
+        type: TraktMediaType? = null,
+        itemId: Int? = null,
+        startAt: Instant? = null,
+        endAt: Instant? = null,
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktHistoryItem> = client.get {
+        when {
+            type != null && itemId != null -> endPointSync("history", type.value, itemId.toString())
+            type != null -> endPointSync("history", type.value)
+            else -> endPointSync("history")
+        }
+
+        startAt?.let { parameter("start_at", it.toString()) }
+        endAt?.let { parameter("end_at", it.toString()) }
+        extended?.let { parameterExtended(it) }
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
+    }.bodyPage()
 
     suspend fun addToWatchlist(items: TraktSyncItems): TraktSyncResponse = client.post {
         endPointSync("watchlist")
@@ -135,45 +159,69 @@ class TraktSyncApi(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktWatchlistItem> = client.get {
+    ): List<TraktWatchlistItem> = getWatchlistMoviesPage(extended, page, limit).items
+
+    suspend fun getWatchlistMoviesPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktWatchlistItem> = client.get {
         endPointSync("watchlist", "movies")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getWatchlistShows(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktWatchlistItem> = client.get {
+    ): List<TraktWatchlistItem> = getWatchlistShowsPage(extended, page, limit).items
+
+    suspend fun getWatchlistShowsPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktWatchlistItem> = client.get {
         endPointSync("watchlist", "shows")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getWatchlistSeasons(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktWatchlistItem> = client.get {
+    ): List<TraktWatchlistItem> = getWatchlistSeasonsPage(extended, page, limit).items
+
+    suspend fun getWatchlistSeasonsPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktWatchlistItem> = client.get {
         endPointSync("watchlist", "seasons")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getWatchlistEpisodes(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktWatchlistItem> = client.get {
+    ): List<TraktWatchlistItem> = getWatchlistEpisodesPage(extended, page, limit).items
+
+    suspend fun getWatchlistEpisodesPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktWatchlistItem> = client.get {
         endPointSync("watchlist", "episodes")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     // Collection endpoints
 
@@ -181,45 +229,69 @@ class TraktSyncApi(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktCollectionItem> = client.get {
+    ): List<TraktCollectionItem> = getCollectionMoviesPage(extended, page, limit).items
+
+    suspend fun getCollectionMoviesPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktCollectionItem> = client.get {
         endPointSync("collection", "movies")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getCollectionShows(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktCollectionItem> = client.get {
+    ): List<TraktCollectionItem> = getCollectionShowsPage(extended, page, limit).items
+
+    suspend fun getCollectionShowsPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktCollectionItem> = client.get {
         endPointSync("collection", "shows")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getFavoriteMovies(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktFavoriteItem> = client.get {
+    ): List<TraktFavoriteItem> = getFavoriteMoviesPage(extended, page, limit).items
+
+    suspend fun getFavoriteMoviesPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktFavoriteItem> = client.get {
         endPointSync("favorites", "movies")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getFavoriteShows(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktFavoriteItem> = client.get {
+    ): List<TraktFavoriteItem> = getFavoriteShowsPage(extended, page, limit).items
+
+    suspend fun getFavoriteShowsPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktFavoriteItem> = client.get {
         endPointSync("favorites", "shows")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     // Ratings endpoints
 
@@ -227,45 +299,69 @@ class TraktSyncApi(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktRatedItem> = client.get {
+    ): List<TraktRatedItem> = getRatedMoviesPage(extended, page, limit).items
+
+    suspend fun getRatedMoviesPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktRatedItem> = client.get {
         endPointSync("ratings", "movies")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getRatedShows(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktRatedItem> = client.get {
+    ): List<TraktRatedItem> = getRatedShowsPage(extended, page, limit).items
+
+    suspend fun getRatedShowsPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktRatedItem> = client.get {
         endPointSync("ratings", "shows")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getRatedSeasons(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktRatedItem> = client.get {
+    ): List<TraktRatedItem> = getRatedSeasonsPage(extended, page, limit).items
+
+    suspend fun getRatedSeasonsPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktRatedItem> = client.get {
         endPointSync("ratings", "seasons")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getRatedEpisodes(
         extended: TraktExtended? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktRatedItem> = client.get {
+    ): List<TraktRatedItem> = getRatedEpisodesPage(extended, page, limit).items
+
+    suspend fun getRatedEpisodesPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktRatedItem> = client.get {
         endPointSync("ratings", "episodes")
         extended?.let { parameterExtended(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getLastActivities(): TraktLastActivities = client.get {
         endPointSync("last_activities")

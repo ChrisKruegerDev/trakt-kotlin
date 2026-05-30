@@ -18,7 +18,6 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.utils.unwrapCancellationException
-import io.ktor.http.HttpStatusCode
 import io.ktor.http.ContentType
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
@@ -75,22 +74,14 @@ internal object HttpClientFactory {
                             requestUrl = response.call.request.url.toString(),
                             body = bodyText,
                             errorBody = errorBody,
+                            headers = response.headers.entries().associate { it.key to it.value.joinToString(",") },
                         )
                     }
                 }
             }
 
-            // see https://ktor.io/docs/client-retry.html
-            config.maxRequestRetries?.let {
+            config.maxRequestRetries?.takeIf { it > 0 }?.let {
                 install(HttpRequestRetry) {
-                    retryIf(it) { _, httpResponse ->
-                        when {
-                            httpResponse.status.value in 500..599 -> true
-                            httpResponse.status == HttpStatusCode.TooManyRequests -> true
-                            else -> false
-                        }
-                    }
-
                     retryOnExceptionIf(maxRetries = it) { _, cause ->
                         when {
                             cause is TraktException -> false
@@ -99,7 +90,6 @@ internal object HttpClientFactory {
                         }
                     }
 
-                    // Exponential backoff with Retry-After header support, capped at 30s
                     exponentialDelay(maxDelayMs = 30_000)
                 }
             }

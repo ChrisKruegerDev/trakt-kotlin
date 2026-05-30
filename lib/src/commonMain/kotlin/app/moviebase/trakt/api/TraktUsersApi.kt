@@ -2,6 +2,8 @@ package app.moviebase.trakt.api
 
 import app.moviebase.trakt.TraktExtended
 import app.moviebase.trakt.TraktWebConfig
+import app.moviebase.trakt.core.TraktPage
+import app.moviebase.trakt.core.bodyPage
 import app.moviebase.trakt.core.endPoint
 import app.moviebase.trakt.core.parameterEndAt
 import app.moviebase.trakt.core.parameterExtended
@@ -79,12 +81,20 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktUserListItem> = client.get {
+    ): List<TraktUserListItem> = getListItemsPage(userSlug, listId, page, limit, extended).items
+
+    suspend fun getListItemsPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        listId: String,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktUserListItem> = client.get {
         endPointLists(userSlug, listId)
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun addListItems(
         userSlug: TraktUserSlug = TraktUserSlug.ME,
@@ -118,14 +128,25 @@ class TraktUsersApi(
         endAt: Instant? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktHistoryItem> = client.get {
+    ): List<TraktHistoryItem> = getHistoryPage(userSlug, listType, itemId, extended, startAt, endAt, page, limit).items
+
+    suspend fun getHistoryPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        listType: TraktListMediaType? = null,
+        itemId: Int? = null,
+        extended: TraktExtended? = null,
+        startAt: Instant? = null,
+        endAt: Instant? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktHistoryItem> = client.get {
         endPointHistory(userSlug, listType, itemId)
         extended?.let { parameterExtended(extended) }
         startAt?.let { parameterStartAt(it) }
         endAt?.let { parameterEndAt(it) }
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getFollowers(
         userSlug: TraktUserSlug,
@@ -236,7 +257,15 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktHiddenItem> = client.get {
+    ): List<TraktHiddenItem> = getHiddenItemsPage(section, type, page, limit, extended).items
+
+    suspend fun getHiddenItemsPage(
+        section: TraktHiddenSection,
+        type: TraktMediaType? = null,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktHiddenItem> = client.get {
         if (type != null) {
             endPoint("users", "hidden", section.value, type.value)
         } else {
@@ -245,7 +274,7 @@ class TraktUsersApi(
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun addHiddenItems(
         section: TraktHiddenSection,
@@ -284,7 +313,14 @@ class TraktUsersApi(
         type: String? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktNote> = client.get {
+    ): List<TraktNote> = getUserNotesPage(userSlug, type, page, limit).items
+
+    suspend fun getUserNotesPage(
+        userSlug: TraktUserSlug,
+        type: String? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktNote> = client.get {
         val paths = buildList {
             add("users")
             add(userSlug.name)
@@ -294,7 +330,7 @@ class TraktUsersApi(
         endPoint(*paths.toTypedArray())
         page?.let { parameterPage(it) }
         limit?.let { parameterLimit(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun updateList(
         userSlug: TraktUserSlug = TraktUserSlug.ME,

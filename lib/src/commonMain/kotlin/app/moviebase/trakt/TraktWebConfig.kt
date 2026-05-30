@@ -22,6 +22,10 @@ internal object TraktHeader {
     const val PAGINATION_PAGE = "X-Pagination-Page"
     const val PAGINATION_PAGE_COUNT = "X-Pagination-Page-Count"
     const val PAGINATION_ITEM_COUNT = "X-Pagination-Item-Count"
+    const val RETRY_AFTER = "Retry-After"
+    const val X_UPGRADE_URL = "X-Upgrade-URL"
+    const val X_VIP_USER = "X-VIP-User"
+    const val X_ACCOUNT_LIMIT = "X-Account-Limit"
 }
 
 internal object TraktUrlParameter {
