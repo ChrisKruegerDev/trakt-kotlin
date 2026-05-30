@@ -120,7 +120,9 @@ class TraktRateLimitTest {
         {
             clientId = "someKey"
             useCache = true
-            useTimeout = true
+            // Disable HttpTimeout: under runTest's virtual clock it spuriously fires while the
+            // scheduler advances through the retry backoff. These tests exercise retry, not timeout.
+            useTimeout = false
 
             maxRequestRetries = maxRetries
 

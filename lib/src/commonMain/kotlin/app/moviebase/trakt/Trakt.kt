@@ -22,12 +22,10 @@ import app.moviebase.trakt.api.TraktShowsApi
 import app.moviebase.trakt.api.TraktSyncApi
 import app.moviebase.trakt.api.TraktUsersApi
 import app.moviebase.trakt.core.HttpClientFactory
-import app.moviebase.trakt.core.TraktDsl
 import app.moviebase.trakt.core.interceptRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.header
 
-@TraktDsl
 fun Trakt(block: TraktClientConfig.() -> Unit): Trakt {
     val config = TraktClientConfig().apply(block)
     return Trakt(config)
