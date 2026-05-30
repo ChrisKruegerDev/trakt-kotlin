@@ -15,6 +15,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import kotlin.time.Duration.Companion.seconds
 
 class TraktExceptionTest {
 
@@ -113,6 +114,30 @@ class TraktExceptionTest {
         assertThat(exception.errorBody).isNotNull()
         assertThat(exception.errorBody?.error).isEqualTo("invalid_grant")
         assertThat(exception.errorBody?.errorDescription).isEqualTo("The provided authorization grant is invalid")
+    }
+
+    @Test
+    fun `retryAfter exposes the Retry-After header as a duration`() {
+        val exception = TraktException(
+            statusCode = 429,
+            requestUrl = "https://api.trakt.tv/shows/vikings",
+            body = "",
+            headers = mapOf("Retry-After" to "12"),
+        )
+
+        assertThat(exception.retryAfterSeconds).isEqualTo(12)
+        assertThat(exception.retryAfter).isEqualTo(12.seconds)
+    }
+
+    @Test
+    fun `retryAfter is null when the header is absent`() {
+        val exception = TraktException(
+            statusCode = 429,
+            requestUrl = "https://api.trakt.tv/shows/vikings",
+            body = "",
+        )
+
+        assertThat(exception.retryAfter).isNull()
     }
 
     private fun mockErrorClient(status: HttpStatusCode, body: String): HttpClient {

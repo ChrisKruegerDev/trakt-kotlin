@@ -19,9 +19,11 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.statement.bodyAsText
 import io.ktor.client.utils.unwrapCancellationException
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.CancellationException
 import kotlinx.io.IOException
 
 internal object HttpClientFactory {
@@ -80,17 +82,21 @@ internal object HttpClientFactory {
                 }
             }
 
-            config.maxRequestRetries?.takeIf { it > 0 }?.let {
+            config.maxRequestRetries?.takeIf { it > 0 }?.let { maxRetries ->
                 install(HttpRequestRetry) {
-                    retryOnExceptionIf(maxRetries = it) { _, cause ->
-                        when {
-                            cause is TraktException -> false
-                            cause is kotlin.coroutines.cancellation.CancellationException -> false
-                            else -> cause.isRetryableException()
-                        }
+                    retryIf(maxRetries) { _, response ->
+                        response.status.value in 500..599 ||
+                            response.status == HttpStatusCode.TooManyRequests
                     }
 
-                    exponentialDelay(maxDelayMs = 30_000)
+                    retryOnExceptionIf(maxRetries) { _, cause ->
+                        cause !is CancellationException && cause.isRetryableException()
+                    }
+
+                    exponentialDelay(
+                        maxDelayMs = 30_000,
+                        respectRetryAfterHeader = true,
+                    )
                 }
             }
 

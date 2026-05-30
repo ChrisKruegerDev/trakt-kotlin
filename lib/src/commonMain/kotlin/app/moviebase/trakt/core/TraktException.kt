@@ -4,6 +4,8 @@ import app.moviebase.trakt.TraktHeader
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @Serializable
 data class TraktErrorBody(
@@ -34,6 +36,8 @@ class TraktException(
     val isRetryable: Boolean get() = isServerError || isRateLimited
 
     val retryAfterSeconds: Int? get() = header(TraktHeader.RETRY_AFTER)?.toIntOrNull()
+    val retryAfter: Duration? get() = retryAfterSeconds?.seconds
+
     val upgradeUrl: String? get() = header(TraktHeader.X_UPGRADE_URL)
     val vipUser: Boolean? get() = header(TraktHeader.X_VIP_USER)?.toBooleanStrictOrNull()
     val accountLimit: String? get() = header(TraktHeader.X_ACCOUNT_LIMIT)
