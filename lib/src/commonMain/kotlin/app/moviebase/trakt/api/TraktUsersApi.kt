@@ -29,7 +29,7 @@ import app.moviebase.trakt.model.TraktUserListItem
 import app.moviebase.trakt.model.TraktUserSettings
 import app.moviebase.trakt.model.TraktUserSlug
 import app.moviebase.trakt.model.TraktWatchedItem
-import app.moviebase.trakt.model.TraktNote
+import app.moviebase.trakt.model.TraktNoteItem
 import app.moviebase.trakt.model.TraktWatching
 import app.moviebase.trakt.model.TraktWatchlistItem
 import io.ktor.client.HttpClient
@@ -313,14 +313,14 @@ class TraktUsersApi(
         type: String? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): List<TraktNote> = getUserNotesPage(userSlug, type, page, limit).items
+    ): List<TraktNoteItem> = getUserNotesPage(userSlug, type, page, limit).items
 
     suspend fun getUserNotesPage(
         userSlug: TraktUserSlug,
         type: String? = null,
         page: Int? = null,
         limit: Int? = null,
-    ): TraktPage<TraktNote> = client.get {
+    ): TraktPage<TraktNoteItem> = client.get {
         val paths = buildList {
             add("users")
             add(userSlug.name)

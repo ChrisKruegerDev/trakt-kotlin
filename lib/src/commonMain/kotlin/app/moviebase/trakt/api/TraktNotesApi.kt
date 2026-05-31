@@ -2,6 +2,7 @@ package app.moviebase.trakt.api
 
 import app.moviebase.trakt.core.endPoint
 import app.moviebase.trakt.model.TraktNote
+import app.moviebase.trakt.model.TraktNoteItem
 import app.moviebase.trakt.model.TraktNoteRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -38,7 +39,7 @@ class TraktNotesApi(
         }
     }
 
-    suspend fun getItem(id: Long): TraktNote = client.get {
+    suspend fun getItem(id: Long): TraktNoteItem = client.get {
         endPoint("notes", id.toString(), "item")
     }.body()
 }
