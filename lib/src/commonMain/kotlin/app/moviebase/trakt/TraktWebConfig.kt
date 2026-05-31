@@ -1,6 +1,6 @@
 package app.moviebase.trakt
 
-internal object TraktWebConfig {
+object TraktWebConfig {
     const val HOST = "api.trakt.tv"
     const val BASE_URL = "https://api.trakt.tv"
     const val WEBSITE_BASE_URL = "https://trakt.tv"
@@ -16,7 +16,7 @@ internal object TraktWebConfig {
     const val MAX_LIMIT_ITEMS = 1000
 }
 
-internal object TraktHeader {
+object TraktHeader {
     const val API_KEY = "trakt-api-key"
     const val API_VERSION = "trakt-api-version"
     const val PAGINATION_PAGE = "X-Pagination-Page"
@@ -28,7 +28,7 @@ internal object TraktHeader {
     const val X_ACCOUNT_LIMIT = "X-Account-Limit"
 }
 
-internal object TraktUrlParameter {
+object TraktUrlParameter {
     const val HOST = "trakt.tv"
     const val BASE_URL = "https://trakt.tv"
 

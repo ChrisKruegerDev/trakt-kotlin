@@ -13,6 +13,7 @@ import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.cache.HttpCache
+import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.Logging
@@ -41,6 +42,12 @@ internal object HttpClientFactory {
 
             install(ContentNegotiation) {
                 json(json)
+            }
+
+            // see https://ktor.io/docs/client-content-encoding.html
+            install(ContentEncoding) {
+                gzip()
+                deflate()
             }
 
             // see https://ktor.io/docs/auth.html
@@ -107,9 +114,9 @@ internal object HttpClientFactory {
 
             if (config.useTimeout) {
                 install(HttpTimeout) {
-                    requestTimeoutMillis = 60_000
-                    connectTimeoutMillis = 60_000
-                    socketTimeoutMillis = 60_000
+                    connectTimeoutMillis = 10_000   // host reachability — fail fast
+                    socketTimeoutMillis  = 30_000   // stall detection mid-response
+                    requestTimeoutMillis = 30_000   // total ceiling per attempt
                 }
             }
 
