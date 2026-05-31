@@ -24,6 +24,7 @@ class TraktUsersApiTest {
                     "users/me/favorites/movies?page=1&limit=10" to "users/favorites_movies.json",
                     "users/me/favorites/shows?page=1&limit=10" to "users/favorites_shows.json",
                     "users/me/watching" to "users/watching_movie.json",
+                    "users/me/notes?page=1&limit=10" to "users/notes.json",
                 ),
         )
 
@@ -198,5 +199,34 @@ class TraktUsersApiTest {
             assertThat(first.show).isNotNull()
             assertThat(first.show?.title).isEqualTo("The Wire")
             assertThat(first.show?.year).isEqualTo(2002)
+        }
+
+    @Test
+    fun `it can fetch user notes with nested note and object attached_to`() =
+        runTest {
+            val notes = classToTest.getUserNotes(
+                userSlug = TraktUserSlug.ME,
+                page = 1,
+                limit = 10,
+            )
+
+            assertThat(notes).hasSize(2)
+
+            val movieNote = notes.first()
+            assertThat(movieNote.type).isEqualTo("movie")
+            assertThat(movieNote.attachedTo?.type).isEqualTo("movie")
+            assertThat(movieNote.movie?.title).isEqualTo("Batman Begins")
+            assertThat(movieNote.movie?.ids?.tmdb).isEqualTo(272)
+            // The note content is nested under `note`, not flattened.
+            assertThat(movieNote.note?.id).isEqualTo(49)
+            assertThat(movieNote.note?.notes).isEqualTo("Only watch the extended edition.")
+
+            val showNote = notes[1]
+            assertThat(showNote.type).isEqualTo("show")
+            // attached_to can carry an id (e.g. a specific history play).
+            assertThat(showNote.attachedTo?.type).isEqualTo("history")
+            assertThat(showNote.attachedTo?.id).isEqualTo(4943432)
+            assertThat(showNote.show?.ids?.tmdb).isEqualTo(1399)
+            assertThat(showNote.note?.notes).isEqualTo("Rewatch before the finale.")
         }
 }

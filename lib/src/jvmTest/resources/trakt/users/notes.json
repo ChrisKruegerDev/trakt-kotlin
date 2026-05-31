@@ -1,0 +1,52 @@
+[
+    {
+        "attached_to": {
+            "type": "movie"
+        },
+        "type": "movie",
+        "movie": {
+            "title": "Batman Begins",
+            "year": 2005,
+            "ids": {
+                "trakt": 1,
+                "slug": "batman-begins-2005",
+                "imdb": "tt0372784",
+                "tmdb": 272
+            }
+        },
+        "note": {
+            "id": 49,
+            "notes": "Only watch the extended edition.",
+            "privacy": "private",
+            "spoiler": false,
+            "created_at": "2023-09-07T20:10:18.000Z",
+            "updated_at": "2023-09-07T20:10:56.000Z"
+        }
+    },
+    {
+        "attached_to": {
+            "type": "history",
+            "id": 4943432
+        },
+        "type": "show",
+        "show": {
+            "title": "Game of Thrones",
+            "year": 2011,
+            "ids": {
+                "trakt": 353,
+                "slug": "game-of-thrones",
+                "tvdb": 121361,
+                "imdb": "tt0944947",
+                "tmdb": 1399
+            }
+        },
+        "note": {
+            "id": 50,
+            "notes": "Rewatch before the finale.",
+            "privacy": "private",
+            "spoiler": false,
+            "created_at": "2023-09-08T20:10:18.000Z",
+            "updated_at": "2023-09-08T20:10:56.000Z"
+        }
+    }
+]
