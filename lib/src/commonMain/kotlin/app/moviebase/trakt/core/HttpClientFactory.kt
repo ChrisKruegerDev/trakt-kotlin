@@ -8,8 +8,8 @@ import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpRequestTimeoutException
-import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.HttpResponseValidator
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.cache.HttpCache
@@ -23,6 +23,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CancellationException
 import kotlinx.io.IOException
@@ -75,20 +76,21 @@ internal object HttpClientFactory {
 
             HttpResponseValidator {
                 validateResponse { response ->
-                    if (response.status.value !in 200..299) {
-                        val bodyText = response.bodyAsText()
-                        val errorBody = parseErrorBody(json, bodyText)
-                        throw TraktException(
-                            statusCode = response.status.value,
-                            requestUrl = response.call.request.url.toString(),
-                            body = bodyText,
-                            errorBody = errorBody,
-                            headers = response.headers.entries().associate { it.key to it.value.joinToString(",") },
-                        )
-                    }
+                    if (response.status.isSuccess()) return@validateResponse
+
+                    val bodyText = response.bodyAsText()
+                    val errorBody = parseErrorBody(json, bodyText)
+                    throw TraktException(
+                        statusCode = response.status.value,
+                        requestUrl = response.call.request.url.toString(),
+                        body = bodyText,
+                        errorBody = errorBody,
+                        headers = response.headers.entries().associate { it.key to it.value.joinToString(",") },
+                    )
                 }
             }
 
+            // see https://ktor.io/docs/client-retry.html
             config.maxRequestRetries?.takeIf { it > 0 }?.let { maxRetries ->
                 install(HttpRequestRetry) {
                     retryIf(maxRetries) { _, response ->
@@ -115,7 +117,7 @@ internal object HttpClientFactory {
             if (config.useTimeout) {
                 install(HttpTimeout) {
                     connectTimeoutMillis = 10_000   // host reachability — fail fast
-                    socketTimeoutMillis  = 30_000   // stall detection mid-response
+                    socketTimeoutMillis = 30_000   // stall detection mid-response
                     requestTimeoutMillis = 30_000   // total ceiling per attempt
                 }
             }
