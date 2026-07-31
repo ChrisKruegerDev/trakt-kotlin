@@ -71,10 +71,10 @@ This is a Kotlin Multiplatform library for the Trakt API, supporting JVM, JavaSc
 ### Dependency Management
 
 The project uses Gradle version catalogs (gradle/libs.versions.toml) for dependency management:
-- Kotlin 2.0.21
-- Ktor 3.0.1 for HTTP client
-- kotlinx-serialization 1.7.3
-- kotlinx-datetime 0.6.1
+- Kotlin 2.4.10
+- Ktor 3.5.1 for HTTP client
+- kotlinx-serialization 1.11.0
+- kotlinx-datetime 0.8.0
 
 ### Testing Approach
 
