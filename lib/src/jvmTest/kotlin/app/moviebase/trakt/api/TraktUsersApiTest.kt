@@ -25,6 +25,8 @@ class TraktUsersApiTest {
                     "users/me/favorites/shows?page=1&limit=10" to "users/favorites_shows.json",
                     "users/me/watching" to "users/watching_movie.json",
                     "users/me/notes?page=1&limit=10" to "users/notes.json",
+                    "users/me/stats" to "users/stats.json",
+                    "users/sean" to "users/profile.json",
                 ),
         )
 
@@ -199,6 +201,48 @@ class TraktUsersApiTest {
             assertThat(first.show).isNotNull()
             assertThat(first.show?.title).isEqualTo("The Wire")
             assertThat(first.show?.year).isEqualTo(2002)
+        }
+
+    @Test
+    fun `it can fetch user stats`() =
+        runTest {
+            val stats = classToTest.getStats(TraktUserSlug.ME)
+
+            assertThat(stats.movies.plays).isEqualTo(155)
+            assertThat(stats.movies.watched).isEqualTo(114)
+            assertThat(stats.movies.minutes).isEqualTo(15650)
+            assertThat(stats.movies.collected).isEqualTo(933)
+            assertThat(stats.shows.watched).isEqualTo(16)
+            assertThat(stats.shows.collected).isEqualTo(7)
+            assertThat(stats.seasons.ratings).isEqualTo(6)
+            assertThat(stats.episodes.watched).isEqualTo(534)
+            assertThat(stats.episodes.minutes).isEqualTo(17330)
+            assertThat(stats.network.followers).isEqualTo(4)
+            assertThat(stats.network.following).isEqualTo(11)
+            assertThat(stats.network.friends).isEqualTo(1)
+            assertThat(stats.ratings.total).isEqualTo(389)
+            assertThat(stats.ratings.distribution["10"]).isEqualTo(63f)
+        }
+
+    @Test
+    fun `it can fetch a user profile`() =
+        runTest {
+            val user = classToTest.getProfile(TraktUserSlug("sean"))
+
+            assertThat(user.userName).isEqualTo("sean")
+            assertThat(user.name).isEqualTo("Sean Rudford")
+            assertThat(user.location).isEqualTo("SF")
+            assertThat(user.about).isEqualTo("I have all your bases.")
+            assertThat(user.gender).isEqualTo("male")
+            assertThat(user.age).isEqualTo(35)
+            assertThat(user.private).isFalse()
+            assertThat(user.vip).isTrue()
+            assertThat(user.vipOg).isTrue()
+            assertThat(user.vipYears).isEqualTo(5)
+            assertThat(user.joinedAt).isNotNull()
+            assertThat(user.ids?.slug).isEqualTo("sean")
+            assertThat(user.ids?.uuid).isNotNull()
+            assertThat(user.imagePath).isNotNull()
         }
 
     @Test

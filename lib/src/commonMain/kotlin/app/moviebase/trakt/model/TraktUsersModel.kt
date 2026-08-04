@@ -31,11 +31,17 @@ data class TraktUser(
     @SerialName("name") val name: String? = null,
     @SerialName("location") val location: String? = null,
     @SerialName("about") val about: String? = null,
+    @SerialName("gender") val gender: String? = null,
+    @SerialName("age") val age: Int? = null,
+    @SerialName("private") val private: Boolean = false,
+    @SerialName("director") val director: Boolean = false,
     @SerialName("vip") val vip: Boolean = false,
     @SerialName("joined_at") val joinedAt: Instant? = null,
     @SerialName("vip_ep") val vipEp: Boolean = false,
     @SerialName("ids") val ids: TraktUserIds? = null,
     @SerialName("vip_og") val vipOg: Boolean = false,
+    @SerialName("vip_years") val vipYears: Int = 0,
+    @SerialName("vip_cover_image") val vipCoverImage: String? = null,
     @SerialName("images") val images: TraktUserImage? = null,
 ) {
     val imagePath get() = images?.avatar?.full
@@ -48,14 +54,71 @@ data class TraktAccount(
     @SerialName("cover_image") val coverImage: String? = null,
 )
 
+/**
+ * Response from users/{id}/stats.
+ */
 @Serializable
 data class TraktUserStats(
-    @SerialName("rating") val rating: Int? = null,
+    @SerialName("movies") val movies: TraktMovieStats = TraktMovieStats(),
+    @SerialName("shows") val shows: TraktShowStats = TraktShowStats(),
+    @SerialName("seasons") val seasons: TraktSeasonStats = TraktSeasonStats(),
+    @SerialName("episodes") val episodes: TraktEpisodeStats = TraktEpisodeStats(),
+    @SerialName("network") val network: TraktNetworkStats = TraktNetworkStats(),
+    @SerialName("ratings") val ratings: TraktRatingStats = TraktRatingStats(),
+)
+
+@Serializable
+data class TraktMovieStats(
+    @SerialName("plays") val plays: Int = 0,
+    @SerialName("watched") val watched: Int = 0,
+    @SerialName("minutes") val minutes: Int = 0,
+    @SerialName("collected") val collected: Int = 0,
+    @SerialName("ratings") val ratings: Int = 0,
+    @SerialName("comments") val comments: Int = 0,
+)
+
+@Serializable
+data class TraktShowStats(
+    @SerialName("watched") val watched: Int = 0,
+    @SerialName("collected") val collected: Int = 0,
+    @SerialName("ratings") val ratings: Int = 0,
+    @SerialName("comments") val comments: Int = 0,
+)
+
+@Serializable
+data class TraktSeasonStats(
+    @SerialName("ratings") val ratings: Int = 0,
+    @SerialName("comments") val comments: Int = 0,
+)
+
+@Serializable
+data class TraktEpisodeStats(
+    @SerialName("plays") val plays: Int = 0,
+    @SerialName("watched") val watched: Int = 0,
+    @SerialName("minutes") val minutes: Int = 0,
+    @SerialName("collected") val collected: Int = 0,
+    @SerialName("ratings") val ratings: Int = 0,
+    @SerialName("comments") val comments: Int = 0,
+)
+
+@Serializable
+data class TraktNetworkStats(
+    @SerialName("friends") val friends: Int = 0,
+    @SerialName("followers") val followers: Int = 0,
+    @SerialName("following") val following: Int = 0,
+)
+
+@Serializable
+data class TraktRatingStats(
+    @SerialName("total") val total: Int = 0,
+    @SerialName("distribution") val distribution: Map<String, Float> = emptyMap(),
 )
 
 @Serializable
 data class TraktUserIds(
     @SerialName("slug") val slug: String,
+    @SerialName("trakt") val trakt: Int? = null,
+    @SerialName("uuid") val uuid: String? = null,
 )
 
 @Serializable
@@ -79,6 +142,24 @@ data class TraktList(
 data class TraktListIds(
     @SerialName("trakt") val trakt: Int? = null,
     @SerialName("slug") val slug: String? = null,
+)
+
+@Serializable
+data class TraktReorderRequest(
+    @SerialName("rank") val rank: List<Long>,
+)
+
+@Serializable
+data class TraktReorderResponse(
+    @SerialName("updated") val updated: Int = 0,
+    @SerialName("skipped_ids") val skippedIds: List<Long> = emptyList(),
+    @SerialName("list") val list: TraktReorderedList? = null,
+)
+
+@Serializable
+data class TraktReorderedList(
+    @SerialName("updated_at") val updatedAt: Instant? = null,
+    @SerialName("item_count") val itemCount: Int? = null,
 )
 
 @Serializable

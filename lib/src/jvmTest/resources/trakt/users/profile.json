@@ -1,0 +1,24 @@
+{
+  "username": "sean",
+  "private": false,
+  "name": "Sean Rudford",
+  "vip": true,
+  "vip_ep": true,
+  "director": false,
+  "ids": {
+    "slug": "sean",
+    "uuid": "5c1f8b4a-1c4a-4e05-9b1f-4e4d3f0c9a11"
+  },
+  "joined_at": "2010-09-25T17:49:25.000Z",
+  "location": "SF",
+  "about": "I have all your bases.",
+  "gender": "male",
+  "age": 35,
+  "images": {
+    "avatar": {
+      "full": "https://walter.trakt.tv/images/users/000/000/001/avatars/large/0000welcome.png"
+    }
+  },
+  "vip_og": true,
+  "vip_years": 5
+}

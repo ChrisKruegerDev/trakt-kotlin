@@ -22,12 +22,15 @@ import app.moviebase.trakt.model.TraktList
 import app.moviebase.trakt.model.TraktListMediaType
 import app.moviebase.trakt.model.TraktMediaType
 import app.moviebase.trakt.model.TraktRatedItem
+import app.moviebase.trakt.model.TraktReorderRequest
+import app.moviebase.trakt.model.TraktReorderResponse
 import app.moviebase.trakt.model.TraktSyncItems
 import app.moviebase.trakt.model.TraktSyncResponse
 import app.moviebase.trakt.model.TraktUser
 import app.moviebase.trakt.model.TraktUserListItem
 import app.moviebase.trakt.model.TraktUserSettings
 import app.moviebase.trakt.model.TraktUserSlug
+import app.moviebase.trakt.model.TraktUserStats
 import app.moviebase.trakt.model.TraktWatchedItem
 import app.moviebase.trakt.model.TraktNoteItem
 import app.moviebase.trakt.model.TraktWatching
@@ -116,6 +119,25 @@ class TraktUsersApi(
         setBody(items)
     }.body()
 
+    suspend fun reorderListItems(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        listId: String,
+        rank: List<Long>,
+    ): TraktReorderResponse = client.post {
+        endPointLists(userSlug, listId, "reorder")
+        contentType(ContentType.Application.Json)
+        setBody(TraktReorderRequest(rank))
+    }.body()
+
+    suspend fun reorderLists(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        rank: List<Long>,
+    ): TraktReorderResponse = client.post {
+        endPointUsers(userSlug, "lists", "reorder")
+        contentType(ContentType.Application.Json)
+        setBody(TraktReorderRequest(rank))
+    }.body()
+
     /**
      * Example: users/id/history/type/item_id?start_at=2016-06-01T00%3A00%3A00.000Z&end_at=2016-07-01T23%3A59%3A59.000Z
      */
@@ -172,7 +194,7 @@ class TraktUsersApi(
         extended?.let { parameterExtended(it) }
     }.body()
 
-    suspend fun getStats(userSlug: TraktUserSlug): TraktUser = client.get {
+    suspend fun getStats(userSlug: TraktUserSlug = TraktUserSlug.ME): TraktUserStats = client.get {
         endPointUsers(userSlug, "stats")
     }.body()
 

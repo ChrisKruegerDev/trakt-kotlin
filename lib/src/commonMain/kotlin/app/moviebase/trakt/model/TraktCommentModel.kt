@@ -30,7 +30,7 @@ data class TraktComment(
     @SerialName("likes") val likes: Int? = null,
     @SerialName("replies") val replies: Int? = null,
     @SerialName("user") val user: TraktUser?,
-    @SerialName("user_stats") val userStats: TraktUserStats? = null,
+    @SerialName("user_stats") val userStats: TraktCommentUserStats? = null,
     @SerialName("movie") val movie: TraktMovie? = null,
     @SerialName("show") val show: TraktShow? = null,
     @SerialName("episode") val episode: TraktEpisode? = null,
@@ -40,3 +40,13 @@ data class TraktComment(
     val imagePath get() = user?.imagePath
     val containsSpoiler get() = comment.contains("[spoiler]")
 }
+
+/**
+ * Stats of the commenting user for the item the comment is attached to.
+ */
+@Serializable
+data class TraktCommentUserStats(
+    @SerialName("rating") val rating: Int? = null,
+    @SerialName("play_count") val playCount: Int = 0,
+    @SerialName("completed_count") val completedCount: Int = 0,
+)
