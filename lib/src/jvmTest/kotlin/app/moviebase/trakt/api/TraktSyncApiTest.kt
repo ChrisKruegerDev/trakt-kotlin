@@ -15,6 +15,8 @@ class TraktSyncApiTest {
                     "sync/playback" to "sync/playback.json",
                     "sync/playback/movie" to "sync/playback.json",
                     "sync/collection/shows" to "sync/collection_shows.json",
+                    "sync/watched/movies?page=2&limit=250" to "sync/watched_movies.json",
+                    "sync/watched/shows?page=1&limit=250" to "sync/watched_shows.json",
                 ),
         )
 
@@ -63,5 +65,32 @@ class TraktSyncApiTest {
             assertThat(episodes).isNotEmpty()
             assertThat(episodes.first().number).isEqualTo(1)
             assertThat(episodes.first().season).isNull()
+        }
+
+    @Test
+    fun `it sends page and limit when fetching watched movies`() =
+        runTest {
+            val page = classToTest.getWatchedMoviesPage(page = 2, limit = 250)
+
+            assertThat(page.items).hasSize(2)
+            assertThat(page.items.first().plays).isEqualTo(3)
+            assertThat(page.items.first().movie?.ids?.tmdb).isEqualTo(564)
+        }
+
+    @Test
+    fun `it sends page and limit when fetching watched shows`() =
+        runTest {
+            val page = classToTest.getWatchedShowsPage(page = 1, limit = 250)
+
+            assertThat(page.items).hasSize(1)
+            assertThat(page.items.first().show?.ids?.tmdb).isEqualTo(881)
+        }
+
+    @Test
+    fun `the watched movies list delegates to the paged call`() =
+        runTest {
+            val items = classToTest.getWatchedMovies(page = 2, limit = 250)
+
+            assertThat(items).hasSize(2)
         }
 }

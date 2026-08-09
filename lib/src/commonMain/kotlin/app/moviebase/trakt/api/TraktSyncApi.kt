@@ -139,19 +139,51 @@ class TraktSyncApi(
 
     // Watched endpoints
 
+    /**
+     * Paginated since 2026-07-03. Without page/limit Trakt returns only the FIRST 100 items, so a
+     * caller that needs the user's whole watched set must page — prefer [getWatchedShowsPage].
+     * Max limit is 250; larger values are not honoured. Trakt's OpenAPI spec does not list these
+     * params yet, but the change announcement and its `?page=1&limit=250` example do.
+     */
     suspend fun getWatchedShows(
         extended: TraktExtended? = null,
-    ): List<TraktWatchedItem> = client.get {
+        page: Int? = null,
+        limit: Int? = null,
+    ): List<TraktWatchedItem> = getWatchedShowsPage(extended, page, limit).items
+
+    suspend fun getWatchedShowsPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktWatchedItem> = client.get {
         endPointSync("watched", "shows")
         extended?.let { parameterExtended(it) }
-    }.body()
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
+    }.bodyPage()
 
+    /**
+     * Paginated since 2026-07-03. Without page/limit Trakt returns only the FIRST 100 items, so a
+     * caller that needs the user's whole watched set must page — prefer [getWatchedMoviesPage].
+     * Max limit is 250; larger values are not honoured. Trakt's OpenAPI spec does not list these
+     * params yet, but the change announcement and its `?page=1&limit=250` example do.
+     */
     suspend fun getWatchedMovies(
         extended: TraktExtended? = null,
-    ): List<TraktWatchedItem> = client.get {
+        page: Int? = null,
+        limit: Int? = null,
+    ): List<TraktWatchedItem> = getWatchedMoviesPage(extended, page, limit).items
+
+    suspend fun getWatchedMoviesPage(
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktWatchedItem> = client.get {
         endPointSync("watched", "movies")
         extended?.let { parameterExtended(it) }
-    }.body()
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
+    }.bodyPage()
 
     // Watchlist endpoints
 

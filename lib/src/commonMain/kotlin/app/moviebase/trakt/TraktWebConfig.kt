@@ -49,4 +49,10 @@ enum class TraktExtended(
     NO_SEASONS("noseasons"),
     EPISODES("episodes"),
     FULL_EPISODES("full,episodes"),
+
+    /** Trakt ids mapped to watch dates — carries every play, but no title metadata. */
+    MIN("min"),
+
+    /** Season/episode progress on the watched endpoints, where it is no longer returned by default. */
+    PROGRESS("progress"),
 }
