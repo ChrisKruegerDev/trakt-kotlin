@@ -3,6 +3,7 @@ package app.moviebase.trakt.api
 import app.moviebase.trakt.core.mockHttpClient
 import app.moviebase.trakt.model.TraktHiddenSection
 import app.moviebase.trakt.model.TraktMediaType
+import app.moviebase.trakt.TraktWebConfig
 import app.moviebase.trakt.model.TraktUserSlug
 import app.moviebase.trakt.model.TraktWatching
 import com.google.common.truth.Truth.assertThat
@@ -27,6 +28,8 @@ class TraktUsersApiTest {
                     "users/me/notes?page=1&limit=10" to "users/notes.json",
                     "users/me/stats" to "users/stats.json",
                     "users/sean" to "users/profile.json",
+                    "users/me/watched/movies?page=1&limit=250" to "sync/watched_movies.json",
+                    "users/me/watched/shows?page=1&limit=250" to "sync/watched_shows.json",
                 ),
         )
 
@@ -272,5 +275,31 @@ class TraktUsersApiTest {
             assertThat(showNote.attachedTo?.id).isEqualTo(4943432)
             assertThat(showNote.show?.ids?.tmdb).isEqualTo(1399)
             assertThat(showNote.note?.notes).isEqualTo("Rewatch before the finale.")
+        }
+
+    @Test
+    fun `it sends page and limit when fetching watched movies`() =
+        runTest {
+            val page = classToTest.getWatchedMoviesPage(
+                userSlug = TraktUserSlug.ME,
+                page = 1,
+                limit = TraktWebConfig.MAX_LIMIT_WATCHED,
+            )
+
+            assertThat(page.items).hasSize(2)
+            assertThat(page.items.first().movie?.ids?.tmdb).isEqualTo(564)
+        }
+
+    @Test
+    fun `it sends page and limit when fetching watched shows`() =
+        runTest {
+            val page = classToTest.getWatchedShowsPage(
+                userSlug = TraktUserSlug.ME,
+                page = 1,
+                limit = TraktWebConfig.MAX_LIMIT_WATCHED,
+            )
+
+            assertThat(page.items).hasSize(1)
+            assertThat(page.items.first().show?.ids?.tmdb).isEqualTo(881)
         }
 }

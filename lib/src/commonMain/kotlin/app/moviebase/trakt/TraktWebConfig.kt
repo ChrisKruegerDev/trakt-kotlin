@@ -14,6 +14,9 @@ object TraktWebConfig {
     const val PAGE_MAX_LIMIT = 20
 
     const val MAX_LIMIT_ITEMS = 1000
+
+    /** The watched endpoints clamp anything above this, so a larger limit silently returns 250. */
+    const val MAX_LIMIT_WATCHED = 250
 }
 
 object TraktHeader {

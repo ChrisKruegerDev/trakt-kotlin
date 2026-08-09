@@ -73,10 +73,26 @@ class TraktUsersApi(
         setBody(list)
     }.body()
 
-    suspend fun getLists(userSlug: TraktUserSlug = TraktUserSlug.ME): List<TraktList> = client.get {
+    /**
+     * Paginated: without page/limit Trakt returns only the FIRST 100 lists, so a caller that
+     * needs every list must page — prefer [getListsPage].
+     */
+    suspend fun getLists(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        page: Int? = null,
+        limit: Int? = null,
+    ): List<TraktList> = getListsPage(userSlug, page, limit).items
+
+    suspend fun getListsPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktList> = client.get {
         endPointUsers(userSlug, "lists")
         contentType(ContentType.Application.Json)
-    }.body()
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
+    }.bodyPage()
 
     suspend fun getListItems(
         userSlug: TraktUserSlug = TraktUserSlug.ME,
@@ -210,21 +226,53 @@ class TraktUsersApi(
         return response.body()
     }
 
+    /**
+     * Paginated since 2026-07-03. Without page/limit Trakt returns only the FIRST 100 items, so a
+     * caller that needs the user's whole watched set must page — prefer [getWatchedMoviesPage].
+     * Max limit is [TraktWebConfig.MAX_LIMIT_WATCHED]; larger values are silently clamped.
+     */
     suspend fun getWatchedMovies(
         userSlug: TraktUserSlug,
         extended: TraktExtended? = null,
-    ): List<TraktWatchedItem> = client.get {
+        page: Int? = null,
+        limit: Int? = null,
+    ): List<TraktWatchedItem> = getWatchedMoviesPage(userSlug, extended, page, limit).items
+
+    suspend fun getWatchedMoviesPage(
+        userSlug: TraktUserSlug,
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktWatchedItem> = client.get {
         endPointUsers(userSlug, "watched", "movies")
         extended?.let { parameterExtended(it) }
-    }.body()
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
+    }.bodyPage()
 
+    /**
+     * Paginated since 2026-07-03. Without page/limit Trakt returns only the FIRST 100 items, so a
+     * caller that needs the user's whole watched set must page — prefer [getWatchedShowsPage].
+     * Max limit is [TraktWebConfig.MAX_LIMIT_WATCHED]; larger values are silently clamped.
+     */
     suspend fun getWatchedShows(
         userSlug: TraktUserSlug,
         extended: TraktExtended? = null,
-    ): List<TraktWatchedItem> = client.get {
+        page: Int? = null,
+        limit: Int? = null,
+    ): List<TraktWatchedItem> = getWatchedShowsPage(userSlug, extended, page, limit).items
+
+    suspend fun getWatchedShowsPage(
+        userSlug: TraktUserSlug,
+        extended: TraktExtended? = null,
+        page: Int? = null,
+        limit: Int? = null,
+    ): TraktPage<TraktWatchedItem> = client.get {
         endPointUsers(userSlug, "watched", "shows")
         extended?.let { parameterExtended(it) }
-    }.body()
+        page?.let { parameterPage(it) }
+        limit?.let { parameterLimit(it) }
+    }.bodyPage()
 
     suspend fun getCollectionMovies(
         userSlug: TraktUserSlug,
