@@ -3,6 +3,7 @@ package app.moviebase.trakt
 import app.moviebase.trakt.core.TraktDsl
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -49,6 +50,12 @@ class TraktClientConfig {
     ) {
         httpClientBuilder = {
             HttpClient(engineFactory, block)
+        }
+    }
+
+    fun httpClient(engine: HttpClientEngine, block: HttpClientConfig<*>.() -> Unit = {}) {
+        httpClientBuilder = {
+            HttpClient(engine, block)
         }
     }
 
