@@ -20,7 +20,9 @@ class TraktCheckinApi(
         setBody(item)
     }.body()
 
-    suspend fun deleteCheckin(): TraktCheckin.Active = client.delete {
-        endPoint("checkin")
-    }.body()
+    suspend fun deleteCheckin() {
+        client.delete {
+            endPoint("checkin")
+        }
+    }
 }
