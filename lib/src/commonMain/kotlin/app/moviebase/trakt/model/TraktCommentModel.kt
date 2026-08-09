@@ -24,11 +24,16 @@ data class TraktPostComment(
 @Serializable
 data class TraktComment(
     @SerialName("id") val id: Int,
+    @SerialName("parent_id") val parentId: Int? = null,
     @SerialName("created_at") val createdAt: Instant? = null,
+    @SerialName("updated_at") val updatedAt: Instant? = null,
     @SerialName("comment") val comment: String,
     @SerialName("spoiler") val spoiler: Boolean,
+    @SerialName("review") val review: Boolean = false,
+    @SerialName("language") val language: String? = null,
     @SerialName("likes") val likes: Int? = null,
     @SerialName("replies") val replies: Int? = null,
+    @SerialName("user_rating") val userRating: Int? = null,
     @SerialName("user") val user: TraktUser?,
     @SerialName("user_stats") val userStats: TraktCommentUserStats? = null,
     @SerialName("movie") val movie: TraktMovie? = null,

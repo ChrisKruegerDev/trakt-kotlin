@@ -3,7 +3,6 @@ package app.moviebase.trakt.api
 import app.moviebase.trakt.core.endPoint
 import app.moviebase.trakt.core.parameterLimit
 import app.moviebase.trakt.core.parameterPage
-import app.moviebase.trakt.model.TraktCheckin
 import app.moviebase.trakt.model.TraktComment
 import app.moviebase.trakt.model.TraktCommentItem
 import app.moviebase.trakt.model.TraktMediaType
@@ -23,7 +22,7 @@ import io.ktor.http.contentType
 class TraktCommentsApi(
     private val client: HttpClient,
 ) {
-    suspend fun postComment(comment: TraktPostComment): TraktCheckin.Active = client.post {
+    suspend fun postComment(comment: TraktPostComment): TraktComment = client.post {
         endPoint("comments")
         contentType(ContentType.Application.Json)
         setBody(comment)
@@ -49,9 +48,11 @@ class TraktCommentsApi(
         endPoint("comments", id.toString(), "item")
     }.body()
 
-    suspend fun deleteComment(id: Int): TraktComment = client.delete {
-        endPoint("comments", id.toString())
-    }.body()
+    suspend fun deleteComment(id: Int) {
+        client.delete {
+            endPoint("comments", id.toString())
+        }
+    }
 
     suspend fun getCommentReplies(id: Int): List<TraktComment> = client.get {
         endPoint("comments", id.toString(), "replies")
