@@ -144,6 +144,44 @@ class TraktCalendarsApi(
         extended?.let { parameterExtended(it) }
     }.body()
 
+    // Public endpoints - Hot Releases
+
+    suspend fun getHotReleases(
+        startDate: String? = null,
+        days: Int? = null,
+        extended: TraktExtended? = null,
+    ): List<TraktCalendarShow> = client.get {
+        endPointHotCalendar(startDate, days)
+        extended?.let { parameterExtended(it) }
+    }.body()
+
+    suspend fun getHotNewShows(
+        startDate: String? = null,
+        days: Int? = null,
+        extended: TraktExtended? = null,
+    ): List<TraktCalendarShow> = client.get {
+        endPointHotCalendar("new", startDate, days)
+        extended?.let { parameterExtended(it) }
+    }.body()
+
+    suspend fun getHotSeasonPremieres(
+        startDate: String? = null,
+        days: Int? = null,
+        extended: TraktExtended? = null,
+    ): List<TraktCalendarShow> = client.get {
+        endPointHotCalendar("premieres", startDate, days)
+        extended?.let { parameterExtended(it) }
+    }.body()
+
+    suspend fun getHotFinales(
+        startDate: String? = null,
+        days: Int? = null,
+        extended: TraktExtended? = null,
+    ): List<TraktCalendarShow> = client.get {
+        endPointHotCalendar("finales", startDate, days)
+        extended?.let { parameterExtended(it) }
+    }.body()
+
     private fun HttpRequestBuilder.endPointMyCalendar(
         type: String,
         startDate: String? = null,
@@ -201,6 +239,36 @@ class TraktCalendarsApi(
             add("calendars")
             add("all")
             add(type)
+            add(subtype)
+            startDate?.let { add(it) }
+            days?.let { add(it.toString()) }
+        }
+        endPoint(*paths.toTypedArray())
+    }
+
+    private fun HttpRequestBuilder.endPointHotCalendar(
+        startDate: String? = null,
+        days: Int? = null,
+    ) {
+        val paths = buildList {
+            add("calendars")
+            add("releases")
+            add("hot")
+            startDate?.let { add(it) }
+            days?.let { add(it.toString()) }
+        }
+        endPoint(*paths.toTypedArray())
+    }
+
+    private fun HttpRequestBuilder.endPointHotCalendar(
+        subtype: String,
+        startDate: String? = null,
+        days: Int? = null,
+    ) {
+        val paths = buildList {
+            add("calendars")
+            add("releases")
+            add("hot")
             add(subtype)
             startDate?.let { add(it) }
             days?.let { add(it.toString()) }

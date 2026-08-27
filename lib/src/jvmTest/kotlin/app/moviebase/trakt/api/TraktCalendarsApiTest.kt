@@ -15,6 +15,11 @@ class TraktCalendarsApiTest {
                     "calendars/my/movies" to "calendars/movies.json",
                     "calendars/all/shows" to "calendars/shows.json",
                     "calendars/all/movies" to "calendars/movies.json",
+                    "calendars/releases/hot" to "calendars/hot_releases.json",
+                    "calendars/releases/hot/2026-08-09/7" to "calendars/hot_releases.json",
+                    "calendars/releases/hot/finales/2026-08-09/7" to "calendars/hot_releases.json",
+                    "calendars/releases/hot/new" to "calendars/hot_releases.json",
+                    "calendars/releases/hot/premieres" to "calendars/hot_releases.json",
                 ),
         )
 
@@ -68,5 +73,43 @@ class TraktCalendarsApiTest {
 
             assertThat(movies).isNotEmpty()
             assertThat(movies.first().movie?.title).isEqualTo("Dune: Part Two")
+        }
+
+    @Test
+    fun `it can fetch hot releases`() =
+        runTest {
+            val releases = classToTest.getHotReleases()
+
+            assertThat(releases).hasSize(2)
+            val first = releases.first()
+            assertThat(first.show?.title).isEqualTo("Silo")
+            assertThat(first.episode?.season).isEqualTo(3)
+            assertThat(first.released).isEqualTo("2026-08-09")
+            assertThat(releases[1].released).isNull()
+        }
+
+    @Test
+    fun `it can fetch hot releases for a date range`() =
+        runTest {
+            val releases = classToTest.getHotReleases(startDate = "2026-08-09", days = 7)
+
+            assertThat(releases).hasSize(2)
+            assertThat(releases.first().firstAired).isNotNull()
+        }
+
+    @Test
+    fun `it can fetch hot new shows and premieres`() =
+        runTest {
+            assertThat(classToTest.getHotNewShows()).hasSize(2)
+            assertThat(classToTest.getHotSeasonPremieres()).hasSize(2)
+        }
+
+    @Test
+    fun `it can fetch hot finales for a date range`() =
+        runTest {
+            val finales = classToTest.getHotFinales(startDate = "2026-08-09", days = 7)
+
+            assertThat(finales).hasSize(2)
+            assertThat(finales.first().show?.ids?.tmdb).isEqualTo(125988)
         }
 }

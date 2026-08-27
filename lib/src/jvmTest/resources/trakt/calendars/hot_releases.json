@@ -1,0 +1,52 @@
+[
+  {
+    "first_aired": "2026-08-09T00:00:00.000Z",
+    "released": "2026-08-09",
+    "episode": {
+      "season": 3,
+      "number": 7,
+      "title": "The Long Dark",
+      "ids": {
+        "trakt": 9876543,
+        "tvdb": 11223344,
+        "imdb": "tt9988776",
+        "tmdb": 5544332
+      }
+    },
+    "show": {
+      "title": "Silo",
+      "year": 2023,
+      "ids": {
+        "trakt": 156735,
+        "slug": "silo",
+        "imdb": "tt14688458",
+        "tmdb": 125988
+      }
+    }
+  },
+  {
+    "first_aired": "2026-08-10T00:00:00.000Z",
+    "released": null,
+    "episode": {
+      "season": 1,
+      "number": 1,
+      "title": "Pilot",
+      "ids": {
+        "trakt": 1122334,
+        "tvdb": 5566778,
+        "imdb": "tt1122334",
+        "tmdb": 998877
+      }
+    },
+    "show": {
+      "title": "The Expanse: Osiris",
+      "year": 2026,
+      "ids": {
+        "trakt": 201456,
+        "slug": "the-expanse-osiris",
+        "imdb": "tt2014560",
+        "tmdb": 301456
+      }
+    }
+  }
+]

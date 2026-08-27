@@ -9,6 +9,7 @@ data class TraktCalendarShow(
     @SerialName("first_aired") val firstAired: Instant? = null,
     @SerialName("episode") val episode: TraktEpisode? = null,
     @SerialName("show") val show: TraktShow? = null,
+    @SerialName("released") val released: String? = null,
 )
 
 @Serializable
