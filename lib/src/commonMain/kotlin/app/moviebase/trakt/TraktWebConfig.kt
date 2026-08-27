@@ -3,10 +3,12 @@ package app.moviebase.trakt
 object TraktWebConfig {
     const val HOST = "api.trakt.tv"
     const val BASE_URL = "https://api.trakt.tv"
+    const val OAUTH_HOST = "auth.trakt.tv"
+    const val OAUTH_BASE_URL = "https://auth.trakt.tv"
     const val WEBSITE_BASE_URL = "https://trakt.tv"
 
     const val VERSION = "2"
-    const val OAUTH2_AUTHORIZATION_URL = "https://trakt.tv/oauth/authorize"
+    const val OAUTH2_AUTHORIZATION_URL = "$OAUTH_BASE_URL/oauth/authorize"
 
     const val PAGE_LIMIT = 10
     const val PAGE_LIMIT_RECOMMENDATION = 20

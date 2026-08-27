@@ -61,8 +61,10 @@ internal object HttpClientFactory {
                         }
 
                         refreshTokens {
-                            authCredentials.refreshTokensProvider()
+                            authCredentials.refreshTokensProvider(this)
                         }
+
+                        nonCancellableRefresh = authCredentials.nonCancellableRefresh
 
                         sendWithoutRequest { request ->
                             request.url.host == TraktWebConfig.HOST

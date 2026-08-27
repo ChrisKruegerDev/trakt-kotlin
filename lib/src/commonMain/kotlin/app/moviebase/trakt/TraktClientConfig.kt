@@ -7,6 +7,7 @@ import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.RefreshTokensParams
 import io.ktor.client.plugins.logging.LoggingConfig
 
 @TraktDsl
@@ -69,10 +70,16 @@ class TraktClientConfig {
 
 @TraktDsl
 class TraktAuthCredentials {
-    internal var refreshTokensProvider: suspend () -> BearerTokens? = { null }
+    internal var refreshTokensProvider: suspend RefreshTokensParams.() -> BearerTokens? = { null }
     internal var loadTokensProvider: suspend () -> BearerTokens? = { null }
 
-    fun refreshTokens(provider: suspend () -> BearerTokens?) {
+    /**
+     * Keeps refresh and token-cache replacement alive if the request that triggered the refresh is cancelled.
+     * This should remain enabled for providers such as Trakt that rotate single-use refresh tokens.
+     */
+    var nonCancellableRefresh: Boolean = true
+
+    fun refreshTokens(provider: suspend RefreshTokensParams.() -> BearerTokens?) {
         refreshTokensProvider = provider
     }
 

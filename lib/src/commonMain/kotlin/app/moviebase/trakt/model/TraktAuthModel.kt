@@ -32,6 +32,7 @@ data class TraktTokenRefreshRequest(
     @SerialName("grant_type") val grantType: TraktGrantType? = null,
     @SerialName("refresh_token") val refreshToken: String? = null,
     @SerialName("code") val code: String? = null,
+    @SerialName("code_verifier") val codeVerifier: String? = null,
 )
 
 /**
