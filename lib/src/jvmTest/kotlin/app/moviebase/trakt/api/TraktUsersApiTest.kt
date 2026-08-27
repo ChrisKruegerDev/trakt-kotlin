@@ -30,6 +30,8 @@ class TraktUsersApiTest {
                     "users/sean" to "users/profile.json",
                     "users/me/watched/movies?page=1&limit=250" to "sync/watched_movies.json",
                     "users/me/watched/shows?page=1&limit=250" to "sync/watched_shows.json",
+                    "users/me/lists?page=1&limit=100" to "users/lists.json",
+                    "users/me/collection/movies?page=1&limit=100" to "users/collection_movies.json",
                 ),
         )
 
@@ -301,5 +303,32 @@ class TraktUsersApiTest {
 
             assertThat(page.items).hasSize(1)
             assertThat(page.items.first().show?.ids?.tmdb).isEqualTo(881)
+        }
+
+    @Test
+    fun `it sends page and limit when fetching user lists`() =
+        runTest {
+            val page = classToTest.getListsPage(
+                userSlug = TraktUserSlug.ME,
+                page = 1,
+                limit = 100,
+            )
+
+            assertThat(page.items).hasSize(2)
+            assertThat(page.items.first().name).isEqualTo("Watch Later")
+            assertThat(page.items.first().ids?.trakt).isEqualTo(1234567)
+        }
+
+    @Test
+    fun `collection movies exposes the pagination headers through the paged twin`() =
+        runTest {
+            val page = classToTest.getCollectionMoviesPage(
+                userSlug = TraktUserSlug.ME,
+                page = 1,
+                limit = 100,
+            )
+
+            assertThat(page.items).hasSize(1)
+            assertThat(page.items.first().movie?.ids?.tmdb).isEqualTo(329865)
         }
 }

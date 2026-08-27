@@ -1,0 +1,16 @@
+[
+  {
+    "collected_at": "2026-05-11T19:04:00.000Z",
+    "updated_at": "2026-05-11T19:04:00.000Z",
+    "movie": {
+      "title": "Arrival",
+      "year": 2016,
+      "ids": {
+        "trakt": 175142,
+        "slug": "arrival-2016",
+        "imdb": "tt2543164",
+        "tmdb": 329865
+      }
+    }
+  }
+]

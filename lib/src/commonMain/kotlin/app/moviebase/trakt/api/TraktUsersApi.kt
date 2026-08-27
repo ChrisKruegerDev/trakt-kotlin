@@ -279,24 +279,38 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktCollectionItem> = client.get {
+    ): List<TraktCollectionItem> = getCollectionMoviesPage(userSlug, page, limit, extended).items
+
+    suspend fun getCollectionMoviesPage(
+        userSlug: TraktUserSlug,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktCollectionItem> = client.get {
         endPointUsers(userSlug, "collection", "movies")
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun getCollectionShows(
         userSlug: TraktUserSlug,
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktCollectionItem> = client.get {
+    ): List<TraktCollectionItem> = getCollectionShowsPage(userSlug, page, limit, extended).items
+
+    suspend fun getCollectionShowsPage(
+        userSlug: TraktUserSlug,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktCollectionItem> = client.get {
         endPointUsers(userSlug, "collection", "shows")
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     suspend fun follow(userSlug: TraktUserSlug): TraktFollowResponse = client.post {
         endPointUsers(userSlug, "follow")
@@ -368,7 +382,13 @@ class TraktUsersApi(
         type: String? = null,
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
-    ): List<TraktLike> = client.get {
+    ): List<TraktLike> = getLikesPage(type, page, limit).items
+
+    suspend fun getLikesPage(
+        type: String? = null,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+    ): TraktPage<TraktLike> = client.get {
         if (type != null) {
             endPoint("users", "likes", type)
         } else {
@@ -376,7 +396,7 @@ class TraktUsersApi(
         }
         parameterPage(page)
         parameterLimit(limit)
-    }.body()
+    }.bodyPage()
 
     suspend fun getUserNotes(
         userSlug: TraktUserSlug,
@@ -427,12 +447,19 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktFavoriteItem> = client.get {
+    ): List<TraktFavoriteItem> = getFavoriteMoviesPage(userSlug, page, limit, extended).items
+
+    suspend fun getFavoriteMoviesPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktFavoriteItem> = client.get {
         endPointUsers(userSlug, "favorites", "movies")
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Get a user's favorite shows.
@@ -442,12 +469,19 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktFavoriteItem> = client.get {
+    ): List<TraktFavoriteItem> = getFavoriteShowsPage(userSlug, page, limit, extended).items
+
+    suspend fun getFavoriteShowsPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktFavoriteItem> = client.get {
         endPointUsers(userSlug, "favorites", "shows")
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Add items to a user's favorites.
@@ -476,7 +510,15 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktRatedItem> = client.get {
+    ): List<TraktRatedItem> = getRatingsMoviesPage(userSlug, rating, page, limit, extended).items
+
+    suspend fun getRatingsMoviesPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        rating: Int? = null,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktRatedItem> = client.get {
         if (rating != null) {
             endPointUsers(userSlug, "ratings", "movies", rating.toString())
         } else {
@@ -485,7 +527,7 @@ class TraktUsersApi(
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Get a user's ratings for shows.
@@ -496,7 +538,15 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktRatedItem> = client.get {
+    ): List<TraktRatedItem> = getRatingsShowsPage(userSlug, rating, page, limit, extended).items
+
+    suspend fun getRatingsShowsPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        rating: Int? = null,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktRatedItem> = client.get {
         if (rating != null) {
             endPointUsers(userSlug, "ratings", "shows", rating.toString())
         } else {
@@ -505,7 +555,7 @@ class TraktUsersApi(
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Get a user's ratings for seasons.
@@ -516,7 +566,15 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktRatedItem> = client.get {
+    ): List<TraktRatedItem> = getRatingsSeasonsPage(userSlug, rating, page, limit, extended).items
+
+    suspend fun getRatingsSeasonsPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        rating: Int? = null,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktRatedItem> = client.get {
         if (rating != null) {
             endPointUsers(userSlug, "ratings", "seasons", rating.toString())
         } else {
@@ -525,7 +583,7 @@ class TraktUsersApi(
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Get a user's ratings for episodes.
@@ -536,7 +594,15 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktRatedItem> = client.get {
+    ): List<TraktRatedItem> = getRatingsEpisodesPage(userSlug, rating, page, limit, extended).items
+
+    suspend fun getRatingsEpisodesPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        rating: Int? = null,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktRatedItem> = client.get {
         if (rating != null) {
             endPointUsers(userSlug, "ratings", "episodes", rating.toString())
         } else {
@@ -545,7 +611,7 @@ class TraktUsersApi(
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Get a user's watchlist movies.
@@ -555,12 +621,19 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktWatchlistItem> = client.get {
+    ): List<TraktWatchlistItem> = getWatchlistMoviesPage(userSlug, page, limit, extended).items
+
+    suspend fun getWatchlistMoviesPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktWatchlistItem> = client.get {
         endPointUsers(userSlug, "watchlist", "movies")
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Get a user's watchlist shows.
@@ -570,12 +643,19 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktWatchlistItem> = client.get {
+    ): List<TraktWatchlistItem> = getWatchlistShowsPage(userSlug, page, limit, extended).items
+
+    suspend fun getWatchlistShowsPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktWatchlistItem> = client.get {
         endPointUsers(userSlug, "watchlist", "shows")
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Get a user's watchlist seasons.
@@ -585,12 +665,19 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktWatchlistItem> = client.get {
+    ): List<TraktWatchlistItem> = getWatchlistSeasonsPage(userSlug, page, limit, extended).items
+
+    suspend fun getWatchlistSeasonsPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktWatchlistItem> = client.get {
         endPointUsers(userSlug, "watchlist", "seasons")
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Get a user's watchlist episodes.
@@ -600,12 +687,19 @@ class TraktUsersApi(
         page: Int = 1,
         limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
         extended: TraktExtended? = null,
-    ): List<TraktWatchlistItem> = client.get {
+    ): List<TraktWatchlistItem> = getWatchlistEpisodesPage(userSlug, page, limit, extended).items
+
+    suspend fun getWatchlistEpisodesPage(
+        userSlug: TraktUserSlug = TraktUserSlug.ME,
+        page: Int = 1,
+        limit: Int = TraktWebConfig.MAX_LIMIT_ITEMS,
+        extended: TraktExtended? = null,
+    ): TraktPage<TraktWatchlistItem> = client.get {
         endPointUsers(userSlug, "watchlist", "episodes")
         parameterPage(page)
         parameterLimit(limit)
         extended?.let { parameterExtended(it) }
-    }.body()
+    }.bodyPage()
 
     /**
      * Path: users/userSlug
