@@ -54,9 +54,11 @@ class TraktSeasonsApi(
     suspend fun getRatings(
         showId: String,
         seasonNumber: Int,
+        extended: TraktExtended? = null,
     ): TraktRating {
         val response = client.get {
             endPointSeasons(showId, seasonNumber, "ratings")
+            extended?.let { parameterExtended(it) }
         }
         if (response.status == HttpStatusCode.NoContent) return TraktRating()
         return response.body()

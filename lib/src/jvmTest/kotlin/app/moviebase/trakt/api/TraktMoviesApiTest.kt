@@ -1,5 +1,6 @@
 package app.moviebase.trakt.api
 
+import app.moviebase.trakt.TraktExtended
 import app.moviebase.trakt.core.JsonFactory
 import app.moviebase.trakt.core.mockHttpClient
 import com.google.common.truth.Truth.assertThat
@@ -25,6 +26,7 @@ class TraktMoviesApiTest {
                     "movies/dune-part-two-2024/people" to "movies/people.json",
                     "movies/dune-part-two-2024/studios" to "movies/studios.json",
                     "movies/dune-part-two-2024/ratings" to "movies/rating_empty.json",
+                    "movies/dune-part-two-2024/ratings?extended=all" to "movies/rating_extended.json",
                 ),
         )
 
@@ -104,6 +106,42 @@ class TraktMoviesApiTest {
             assertThat(rating.rating).isEqualTo(0.0)
             assertThat(rating.votes).isEqualTo(0)
             assertThat(rating.distribution).isNull()
+        }
+
+    @Test
+    fun `it requests the extended parameter when asked for all sources`() =
+        runTest {
+            val rating = classToTest.getRating("dune-part-two-2024", TraktExtended.ALL)
+
+            assertThat(rating.rottenTomatoes?.rating).isEqualTo(51)
+            assertThat(rating.rottenTomatoes?.state).isEqualTo("rotten")
+            assertThat(rating.rottenTomatoes?.userRating).isEqualTo(64)
+            assertThat(rating.metascore?.rating).isEqualTo(49)
+            assertThat(rating.letterboxd?.rating).isEqualTo(3.26f)
+            assertThat(rating.imdb?.votes).isEqualTo(382069)
+            assertThat(rating.mal?.rating).isNull()
+        }
+
+    @Test
+    fun `it resolves the nested trakt rating an extended response returns`() =
+        runTest {
+            val rating = classToTest.getRating("dune-part-two-2024", TraktExtended.ALL)
+
+            assertThat(rating.rating).isEqualTo(0.0)
+            assertThat(rating.votes).isEqualTo(0)
+            assertThat(rating.resolvedRating).isEqualTo(7.18772)
+            assertThat(rating.resolvedVotes).isEqualTo(17537)
+            assertThat(rating.resolvedDistribution).isNotNull()
+        }
+
+    @Test
+    fun `it resolves the flat rating a non extended response returns`() =
+        runTest {
+            val rating = classToTest.getRating("dune-part-two-2024")
+
+            assertThat(rating.trakt).isNull()
+            assertThat(rating.resolvedRating).isEqualTo(rating.rating)
+            assertThat(rating.resolvedVotes).isEqualTo(rating.votes)
         }
 
     @Test

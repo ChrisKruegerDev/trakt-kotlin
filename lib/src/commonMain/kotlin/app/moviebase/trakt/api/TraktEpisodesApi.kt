@@ -37,9 +37,11 @@ class TraktEpisodesApi(
         traktSlug: String,
         seasonNumber: Int,
         episodeNumber: Int,
+        extended: TraktExtended? = null,
     ): TraktRating {
         val response = client.get {
             endPointEpisodes(traktSlug, seasonNumber, episodeNumber, "ratings")
+            extended?.let { parameterExtended(it) }
         }
 
         if (response.status == HttpStatusCode.NoContent) return TraktRating()

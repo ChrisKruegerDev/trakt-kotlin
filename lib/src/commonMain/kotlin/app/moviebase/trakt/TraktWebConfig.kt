@@ -60,4 +60,7 @@ enum class TraktExtended(
 
     /** Season/episode progress on the watched endpoints, where it is no longer returned by default. */
     PROGRESS("progress"),
+
+    /** On the ratings endpoints, adds the external sources and nests Trakt's own rating. */
+    ALL("all"),
 }
