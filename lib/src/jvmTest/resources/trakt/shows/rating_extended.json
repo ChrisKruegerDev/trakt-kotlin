@@ -1,0 +1,44 @@
+{
+  "trakt": {
+    "rating": 9.31405,
+    "votes": 71330,
+    "distribution": {
+      "1": 251,
+      "2": 145,
+      "3": 218,
+      "4": 236,
+      "5": 477,
+      "6": 961,
+      "7": 2967,
+      "8": 6628,
+      "9": 14182,
+      "10": 45265
+    }
+  },
+  "tmdb": {
+    "rating": 8.949,
+    "votes": 18488,
+    "link": "https://www.themoviedb.org/tv/1396"
+  },
+  "imdb": {
+    "rating": 9.5,
+    "votes": 2545451,
+    "link": "https://www.imdb.com/title/tt0903747"
+  },
+  "metascore": {
+    "link": "https://www.imdb.com/title/tt0903747/criticreviews",
+    "rating": 87
+  },
+  "rotten_tomatoes": {
+    "link": "https://www.rottentomatoes.com/tv/breaking_bad",
+    "rating": 96,
+    "state": "fresh",
+    "user_rating": 97,
+    "user_state": "upright"
+  },
+  "mal": {
+    "rating": null,
+    "votes": 0,
+    "link": null
+  }
+}

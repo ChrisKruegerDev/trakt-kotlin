@@ -17,10 +17,35 @@ class TraktShowsApiTest {
                     "shows/the-expanse/next_episode" to "shows/next_episode.json",
                     "shows/the-expanse/people" to "shows/people.json",
                     "shows/the-expanse/studios" to "shows/studios.json",
+                    "shows/breaking-bad/ratings?extended=all" to "shows/rating_extended.json",
                 ),
         )
 
     val classToTest = TraktShowsApi(client)
+
+    @Test
+    fun `it reads every external rating source of a show`() =
+        runTest {
+            val rating = classToTest.getRating("breaking-bad", TraktExtended.ALL)
+
+            assertThat(rating.rottenTomatoes?.state).isEqualTo("fresh")
+            assertThat(rating.rottenTomatoes?.rating).isEqualTo(96)
+            assertThat(rating.metascore?.rating).isEqualTo(87)
+            assertThat(rating.imdb?.rating).isEqualTo(9.5f)
+            assertThat(rating.tmdb?.votes).isEqualTo(18488)
+            assertThat(rating.letterboxd).isNull()
+            assertThat(rating.mal?.rating).isNull()
+        }
+
+    @Test
+    fun `it resolves the nested trakt rating of a show`() =
+        runTest {
+            val rating = classToTest.getRating("breaking-bad", TraktExtended.ALL)
+
+            assertThat(rating.rating).isEqualTo(0.0)
+            assertThat(rating.resolvedRating).isEqualTo(9.31405)
+            assertThat(rating.resolvedVotes).isEqualTo(71330)
+        }
 
     @Test
     fun `it can fetch show summary`() =

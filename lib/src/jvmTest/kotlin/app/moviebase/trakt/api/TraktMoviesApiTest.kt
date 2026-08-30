@@ -118,6 +118,9 @@ class TraktMoviesApiTest {
             assertThat(rating.rottenTomatoes?.userRating).isEqualTo(64)
             assertThat(rating.metascore?.rating).isEqualTo(49)
             assertThat(rating.letterboxd?.rating).isEqualTo(3.26f)
+            assertThat(rating.letterboxd?.votes).isEqualTo(444819)
+            assertThat(rating.rottenTomatoes?.userState).isEqualTo("upright")
+            assertThat(rating.metascore?.link).contains("imdb.com")
             assertThat(rating.imdb?.votes).isEqualTo(382069)
             assertThat(rating.mal?.rating).isNull()
         }
@@ -129,8 +132,8 @@ class TraktMoviesApiTest {
 
             assertThat(rating.rating).isEqualTo(0.0)
             assertThat(rating.votes).isEqualTo(0)
-            assertThat(rating.resolvedRating).isEqualTo(7.18772)
-            assertThat(rating.resolvedVotes).isEqualTo(17537)
+            assertThat(rating.resolvedRating).isEqualTo(7.18649)
+            assertThat(rating.resolvedVotes).isEqualTo(17561)
             assertThat(rating.resolvedDistribution).isNotNull()
         }
 
