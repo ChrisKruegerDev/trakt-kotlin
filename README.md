@@ -97,6 +97,25 @@ val trakt = Trakt("clientId")
 val traktShow = trakt.shows.getSummary(traktSlug = "vikings")
 ```
 
+### Ratings
+`getRating` returns Trakt's own score. Passing `TraktExtended.ALL` adds the external sources —
+TMDB, IMDb, Metascore, Rotten Tomatoes, Letterboxd and MyAnimeList — each with its own `rating`,
+`votes` and `link`.
+
+```kotlin
+val rating = trakt.movies.getRating("tron-legacy-2010", TraktExtended.ALL)
+
+rating.resolvedRating      // 7.18649 — Trakt's own score
+rating.imdb?.rating        // 6.8 on a 0-10 scale
+rating.rottenTomatoes?.rating  // 51 on a 0-100 scale, with `state` and `userRating`
+rating.letterboxd?.rating  // 3.26 on a 0-5 scale
+```
+
+`extended=all` moves Trakt's own score into a nested object and omits the flat `rating`/`votes`
+fields, so read it through `resolvedRating`/`resolvedVotes` — the flat properties report `0.0`/`0`
+for such a response. Every source is independently nullable and each uses its own scale; the library
+returns raw values and leaves normalisation to the caller.
+
 ### Search
 Search for TV shows by a query.
 
