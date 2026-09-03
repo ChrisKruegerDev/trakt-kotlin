@@ -1,6 +1,8 @@
 package app.moviebase.trakt.api
 
 import app.moviebase.trakt.TraktExtended
+import app.moviebase.trakt.core.TraktPage
+import app.moviebase.trakt.core.bodyPage
 import app.moviebase.trakt.core.endPoint
 import app.moviebase.trakt.core.parameterExtended
 import app.moviebase.trakt.core.parameterLimit
@@ -98,11 +100,11 @@ class TraktSeasonsApi(
         sort: TraktCommentSort = TraktCommentSort.NEWEST,
         page: Int = 1,
         limit: Int = 10,
-    ): List<TraktComment> = client.get {
+    ): TraktPage<TraktComment> = client.get {
         endPointSeasons(showId, seasonNumber, "comments", sort.value)
         parameterPage(page)
         parameterLimit(limit)
-    }.body()
+    }.bodyPage()
 
     /**
      * Returns lists that contain this season.
