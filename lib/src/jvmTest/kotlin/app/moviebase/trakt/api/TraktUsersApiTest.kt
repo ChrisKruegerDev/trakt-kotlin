@@ -10,6 +10,7 @@ import app.moviebase.trakt.model.TraktWatching
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
+import kotlin.time.Instant
 
 class TraktUsersApiTest {
     val client =
@@ -328,6 +329,7 @@ class TraktUsersApiTest {
             assertThat(page.items).hasSize(2)
             assertThat(page.items.first().name).isEqualTo("Watch Later")
             assertThat(page.items.first().ids?.trakt).isEqualTo(1234567)
+            assertThat(page.items.first().updatedAt).isEqualTo(Instant.parse("2026-07-30T18:22:00Z"))
         }
 
     @Test

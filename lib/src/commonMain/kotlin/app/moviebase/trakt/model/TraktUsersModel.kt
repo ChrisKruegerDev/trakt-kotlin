@@ -136,6 +136,7 @@ data class TraktList(
     @SerialName("name") val name: String? = null,
     @SerialName("ids") val ids: TraktListIds? = null,
     @SerialName("privacy") val privacy: TraktListPrivacy? = null,
+    @SerialName("updated_at") val updatedAt: Instant? = null,
 )
 
 @Serializable
